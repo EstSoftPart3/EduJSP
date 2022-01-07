@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="code">
+
+	<!-- 코드 그룹 - 목록 조회 -->
+	<select id="selectCodeGroupList" parameterType="hashmap" resultType="com.code.vo.CodeGroupVo">
+		SELECT 
+		      GRP_CD
+			, GRP_NM
+			, GRP_SORT_ORDER
+			, GRP_IS_USE
+			, GRP_NOTE
+		FROM EDU_JSP.TB_EST_CODE_GRP
+		<where>
+		    <if test="keyWord != '' and keyWord != NULL">
+		    	AND GRP_CD LIKE CONCAT('%', #{keyWord}, '%') OR GRP_NM LIKE CONCAT('%', #{keyWord}, '%')
+		    </if>
+		    <if test="isUse != 'ALL' and isUse != NULL">
+		    	AND GRP_IS_USE = #{isUse}
+		    </if>
+		</where>
+	</select>
+	
+	<!-- 코드 - 목록 조회 -->
+	<select id="selectCodeList" parameterType="hashmap" resultType="com.code.vo.CodeVo">
+		SELECT 
+		      CODE_GRP_CD
+			, CODE_COM_CD
+			, CODE_NM
+			, CODE_SORT_ORDER
+			, CODE_IS_USE
+			, CODE_ATTR_VALUE1
+			, CODE_ATTR_VALUE2
+			, CODE_ATTR_VALUE3
+			, CODE_NOTE
+		FROM EDU_JSP.TB_EST_CODE
+		WHERE CODE_GRP_CD = #{grpCd}
+		<if test="isUse != 'ALL' and isUse != NULL">
+	    	AND CODE_IS_USE = #{isUse}
+	    </if>
+	</select>
+	
+	<!-- 코드그룹 - 추가 -->
+	<insert id="insertCodeGroup" parameterType="com.code.vo.CodeGroupVo">
+		INSERT INTO EDU_JSP.TB_EST_CODE_GRP (
+			  GRP_CD
+			, GRP_NM
+			, GRP_SORT_ORDER
+			, GRP_IS_USE
+			, GRP_NOTE
+		) VALUES (
+			  #{grpCd}
+			, #{grpNm}
+			, #{grpSortOrder}
+			, #{grpIsUse}
+			, #{grpNote}
+		)
+	</insert>
+	
+	<!-- 코드 - 추가 -->
+	<insert id="insertCode" parameterType="com.code.vo.CodeVo">
+		INSERT INTO EDU_JSP.TB_EST_CODE (
+			  CODE_GRP_CD
+			, CODE_COM_CD
+			, CODE_NM
+			, CODE_SORT_ORDER
+			, CODE_IS_USE
+			, CODE_ATTR_VALUE1
+			, CODE_ATTR_VALUE2
+			, CODE_ATTR_VALUE3
+			, CODE_NOTE
+		) VALUES (
+			  #{codeGrpCd}
+			, #{codeComCd}
+			, #{codeNm}
+			, #{codeSortOrder}
+			, #{codeIsUse}
+			, #{codeAttrValue1}
+			, #{codeAttrValue2}
+			, #{codeAttrValue3}
+			, #{codeNote}
+		)
+	</insert>
+	
+	<!-- 코드그룹 - 수정 -->
+	<update id="updateCodeGroup" parameterType="com.code.vo.CodeGroupVo">
+		<![CDATA[
+			UPDATE EDU_JSP.TB_EST_CODE_GRP SET
+			  GRP_NM               = #{grpNm}
+			, GRP_SORT_ORDER       = #{grpSortOrder}
+			, GRP_IS_USE           = #{grpIsUse}
+			, GRP_NOTE             = #{grpNote}
+			WHERE GRP_CD = #{grpCd}
+		]]>
+	</update>
+	
+	<!-- 코드 - 수정 -->
+	<update id="updateCode" parameterType="com.code.vo.CodeVo">
+		<![CDATA[
+			UPDATE EDU_JSP.TB_EST_CODE SET
+			  CODE_NM               = #{codeNm}
+			, CODE_SORT_ORDER       = #{codeSortOrder}
+			, CODE_IS_USE           = #{codeIsUse}
+			, CODE_ATTR_VALUE1      = #{codeAttrValue1}
+			, CODE_ATTR_VALUE2      = #{codeAttrValue2}
+			, CODE_ATTR_VALUE3      = #{codeAttrValue3}
+			, CODE_NOTE             = #{codeNote}
+			WHERE CODE_GRP_CD = #{codeGrpCd} and CODE_COM_CD = #{codeComCd} 
+		]]>
+	</update>
+	
+	<!-- 코드그룹 - 삭제 -->
+	<delete id="deleteCodeGroup" parameterType="com.code.vo.CodeGroupVo">
+		<![CDATA[
+			DELETE FROM EDU_JSP.TB_EST_CODE_GRP
+			WHERE GRP_CD = #{grpCd}
+		]]>
+	</delete>
+	
+	<!-- 코드 - 삭제 -->
+	<delete id="deleteCode" parameterType="com.code.vo.CodeVo">
+		<![CDATA[
+			DELETE FROM EDU_JSP.TB_EST_CODE
+			WHERE CODE_GRP_CD = #{codeGrpCd} and CODE_COM_CD = #{codeComCd}
+		]]>
+	</delete>
+	
+
+</mapper>

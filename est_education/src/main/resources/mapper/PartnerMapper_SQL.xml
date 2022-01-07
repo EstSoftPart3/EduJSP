@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="partner">
+
+	<!-- 협력사 관리 Mapper -->
+	<!-- 협력사 리스트 뽑기 위한 resultMap으로 셋팅 -->
+	<resultMap type="com.partner.vo.PartnerVo" id="partnerVo">
+		<result property="prtnSq" column="PRTN_SQ"/>
+		<result property="codeComCd" column="PRTN_BIZ_TCD" />
+		<result property="codeNm" column="CODE_NM" />
+		<result property="prtnCorpNm" column="PRTN_CORP_NM" />
+		<result property="prtnRepNm" column="PRTN_REP_NM" />
+		<result property="prtnBizAddr" column="PRTN_BIZ_ADDR" />
+		<result property="prtnDirDrtmtCd" column="PRTN_DIR_DRTMT_CD" />
+		<result property="prtnDirPositn" column="PRTN_DIR_POSITN" />
+		<result property="prtnDirNm" column="PRTN_DIR_NM" />
+		<result property="prtnDirTelNum" column="PRTN_DIR_TEL_NUM" />
+		<result property="prtnDirEmail" column="PRTN_DIR_EMAIl" />
+	</resultMap>
+
+	<!-- 협력사 리스트 출력 및 검색,조회 SQL -->
+	<select id="selectPartnerList" resultMap="partnerVo" parameterType="hashmap">
+		SELECT P.PRTN_SQ
+			 , C.CODE_NM
+			 , P.PRTN_CORP_NM
+			 , P.PRTN_REP_NM
+			 , P.PRTN_BIZ_ADDR
+			 , P.PRTN_DIR_DRTMT_CD
+			 , P.PRTN_DIR_POSITN
+			 , P.PRTN_DIR_NM
+			 , P.PRTN_DIR_TEL_NUM
+			 , P.PRTN_DIR_EMAIL
+		FROM TB_EST_PRTN P INNER JOIN TB_EST_CODE C ON C.CODE_COM_CD = P.PRTN_BIZ_TCD
+		<where>
+			<if test="prtnCorpNm != '' and prtnCorpNm != NULL">
+		    	AND PRTN_CORP_NM LIKE CONCAT('%', #{prtnCorpNm}, '%')
+		    </if>
+			<if test="codeComCd != 'all' and codeComCd != NULL">
+				AND P.CODE_COM_CD LIKE CONCAT('%', #{codeComCd}, '%')
+			</if>
+		</where>
+		ORDER BY P.PRTN_SQ
+	</select>
+
+	<select id="selectPartnerOne" parameterType="_long" resultType="com.partner.vo.PartnerVo">
+		<![CDATA[
+			SELECT P.PRTN_SQ
+				 , P.PRTN_BIZ_TCD					
+				 , C.CODE_NM		
+				 , P.PRTN_BIZ_REG_NUM
+				 , P.PRTN_CORP_NM		
+				 , P.PRTN_REP_NM		
+				 , P.PRTN_REG_DT			
+				 , P.PRTN_CORP_REG_NUM
+				 , P.PRTN_BIZ_ADDR		
+				 , P.PRTN_BIZ_CND		
+				 , P.PRTN_BIZ_PRD
+				 , P.PRTN_DIR_NM	
+				 , P.PRTN_DIR_DRTMT_CD	
+				 , P.PRTN_DIR_POSITN
+				 , P.PRTN_DIR_TEL_NUM
+				 , P.PRTN_DIR_HP_NUM	
+				 , P.PRTN_DIR_EMAIL	
+				 FROM TB_EST_PRTN P INNER JOIN TB_EST_CODE C ON C.CODE_COM_CD = P.PRTN_BIZ_TCD WHERE PRTN_SQ = #{sq}
+		]]>
+	</select>
+	
+	<update id="updatePartner" parameterType="com.partner.vo.PartnerVo">
+		<![CDATA[
+			UPDATE EDU_JSP.TB_EST_PRTN SET
+				  PRTN_BIZ_TCD			= 			#{ codeComCd }
+				, PRTN_BIZ_REG_NUM		=			#{ prtnBizRegNum }
+				, PRTN_CORP_NM			=			#{ prtnCorpNm }
+				, PRTN_REP_NM			=			#{ prtnRepNm }
+				, PRTN_REG_DT			=			#{ prtnRegDt }
+				, PRTN_CORP_REG_NUM		=			#{ prtnCorpRegNum }
+				, PRTN_BIZ_ADDR			=			#{ prtnBizAddr }
+				, PRTN_BIZ_CND			=			#{ prtnBizCnd }
+				, PRTN_BIZ_PRD			=			#{ prtnBizPrd }
+				, PRTN_DIR_NM			=			#{ prtnDirNm }
+				, PRTN_DIR_DRTMT_CD		=			#{ prtnDirDrtmtCd }
+				, PRTN_DIR_POSITN		=			#{ prtnDirPositn }
+				, PRTN_DIR_TEL_NUM		=			#{ prtnDirTelNum }
+				, PRTN_DIR_HP_NUM		=			#{ prtnDirHpNum }
+				, PRTN_DIR_EMAIL		=			#{ prtnDirEmail }
+				WHERE PRTN_SQ = #{ prtnSq }
+		]]>
+	</update>
+	
+	<insert id="insertPartner" parameterType="com.partner.vo.PartnerVo">
+		INSERT INTO TB_EST_PRTN (
+			  CODE_COM_CD
+			, PRTN_BIZ_REG_NUM
+			, PRTN_CORP_NM
+			, PRTN_REP_NM
+			, PRTN_REG_DT
+			, PRTN_CORP_REG_NUM
+			, PRTN_BIZ_ADDR
+			, PRTN_BIZ_CND
+			, PRTN_BIZ_PRD
+			, PRTN_DIR_NM
+			, PRTN_DIR_DRTMT_CD
+			, PRTN_DIR_POSITN
+			, PRTN_DIR_TEL_NUM
+			, PRTN_DIR_HP_NUM
+			, PRTN_DIR_EMAIL
+		)
+		VALUES (
+			  #{ codeComCd }
+			, #{ prtnBizRegNum }
+			, #{ prtnCorpNm }
+			, #{ prtnRepNm }
+			, #{ prtnRegDt }
+			, #{ prtnCorpRegNum }
+			, #{ prtnBizAddr }
+			, #{ prtnBizCnd }
+			, #{ prtnBizPrd }
+			, #{ prtnDirNm }
+			, #{ prtnDirDrtmtCd }
+			, #{ prtnDirPositn }
+			, #{ prtnDirTelNum }
+			, #{ prtnDirHpNum }
+			, #{ prtnDirEmail }
+		)
+	</insert>
+	
+	<delete id="deletePartner">
+		DELETE FROM TB_EST_PRTN
+		WHERE PRTN_SQ = #{sq}
+	</delete>
+	
+</mapper>

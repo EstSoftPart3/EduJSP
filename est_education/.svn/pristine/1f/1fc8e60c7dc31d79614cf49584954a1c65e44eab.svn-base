@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="equipment">
+
+<!-- 장비 목록조회 -->
+<select id="selectEquipmentList" parameterType="hashmap" resultType="com.equipment.vo.EquipmentVo" >
+	<![CDATA[
+		SELECT
+			EQPMNT_SQ
+		  , EQPMNT_MNG_NUM
+		  , EQPMNT_BRAND
+		  , EQPMNT_MODEL
+		  , EQPMNT_SERIAL
+		  , EQPMNT_STS_TCD
+		  , EQPMNT_INFO
+		  , EQPMNT_TCD
+		  , EQPMNT_IS_USE
+		FROM EDUCATION.TB_EST_EQPMNT
+	]]>
+	<where>
+		<if test="EQPMNT_STS_TCD != NULL">
+			EQPMNT_STS_TCD = #{EQPMNT_STS_TCD}
+		</if>
+		
+		<if test="EQPMNT_TCD_ARR != NULL">
+			AND
+			
+			 <foreach collection="EQPMNT_TCD_ARR" item="item" open="(" close=")" separator="OR">
+				EQPMNT_TCD = #{item.eqpmntTcd}
+			</foreach> 
+		</if>
+		
+		<if test="EQPMNT_TCD_ARRAY != NULL">
+			AND
+			
+			 <foreach collection="EQPMNT_TCD_ARRAY" item="item" open="(" close=")" separator="OR">
+				EQPMNT_TCD = #{item}
+			</foreach> 
+		</if>
+		
+		
+		
+		<choose>
+			<when test="EQPMNT_BRAND != NULL and EQPMNT_SERIAL != NULL and EQPMNT_MODEL != NULL">
+				AND (EQPMNT_BRAND LIKE CONCAT('%', #{EQPMNT_BRAND}, '%')
+					OR EQPMNT_SERIAL LIKE CONCAT('%', #{EQPMNT_SERIAL}, '%')
+					OR EQPMNT_MODEL LIKE CONCAT('%', #{EQPMNT_MODEL}, '%'))			
+			</when>	
+			<otherwise>
+				<if test="EQPMNT_BRAND != NULL">
+					AND EQPMNT_BRAND LIKE CONCAT('%', #{EQPMNT_BRAND}, '%')
+				</if>
+				<if test="EQPMNT_SERIAL != NULL">
+					AND EQPMNT_SERIAL LIKE CONCAT('%', #{EQPMNT_SERIAL}, '%')
+				</if>
+				<if test="EQPMNT_MODEL != NULL">
+					AND EQPMNT_MODEL LIKE CONCAT('%', #{EQPMNT_MODEL}, '%')
+				</if>
+			</otherwise>
+		</choose>
+	</where>
+</select> 
+<insert id="insertEquipment" parameterType="com.equipment.vo.EquipmentVo" >	
+	<selectKey keyProperty="eqpmntSq" resultType="int" order="BEFORE">
+		SELECT IFNULL(MAX(EQPMNT_SQ) + 1 , 1) FROM EDUCATION.TB_EST_EQPMNT
+		<!-- <if test="MAX(EQPMNT_SQ) == NULL">
+			eqpmntSq = 1;
+		</if> -->
+	</selectKey>
+		INSERT INTO EDUCATION.TB_EST_EQPMNT(
+			EQPMNT_SQ,
+			EQPMNT_MNG_NUM
+		  , EQPMNT_BRAND
+		  , EQPMNT_MODEL
+		  , EQPMNT_SERIAL
+		  , EQPMNT_STS_TCD
+		  , EQPMNT_INFO
+		  , EQPMNT_TCD
+		  , EQPMNT_IS_USE
+		) VALUES(
+			#{eqpmntSq}
+		  , #{eqpmntMngNum}
+		  , #{eqpmntBrand}
+		  , #{eqpmntModel}
+		  , #{eqpmntSerial}
+		  , #{eqpmntStsTcd}
+		  , #{eqpmntInfo}
+		  , #{eqpmntTcd}
+		  , DEFAULT
+		)
+	
+
+</insert>
+
+<select id="selectequipmentOne" parameterType="String" resultType="com.equipment.vo.EquipmentVo">
+	<![CDATA[
+		SELECT
+			EQPMNT_SQ
+		  , EQPMNT_MNG_NUM
+		  , EQPMNT_BRAND
+		  , EQPMNT_MODEL
+		  , EQPMNT_SERIAL
+		  , EQPMNT_STS_TCD
+		  , EQPMNT_INFO
+		  , EQPMNT_TCD
+		  , EQPMNT_IS_USE
+		FROM EDUCATION.TB_EST_EQPMNT
+		WHERE EQPMNT_SQ = #{eqpmntSq}
+	]]>
+</select>
+
+<delete id="deleteEquipment" parameterType="String">
+	DELETE
+	FROM EDUCATION.TB_EST_EQPMNT
+	WHERE EQPMNT_SQ = #{eqpmntSq}
+</delete>
+
+<delete id="deleteEquipemntAll" parameterType="java.util.List">
+	DELETE
+	FROM EDUCATION.TB_EST_EQPMNT
+	<where>
+		<foreach collection="list" item="item" open="" close="" separator="OR">
+			EQPMNT_SQ = #{item.eqpmntSq}
+		</foreach>
+	</where>
+</delete>
+
+<update id="updateEquipment" parameterType="com.equipment.vo.EquipmentVo">
+	<![CDATA[
+	UPDATE EDUCATION.TB_EST_EQPMNT
+		SET
+			EQPMNT_MNG_NUM 	= #{eqpmntMngNum},
+			EQPMNT_BRAND 	= #{eqpmntBrand},
+			EQPMNT_MODEL	= #{eqpmntModel},
+			EQPMNT_SERIAL 	= #{eqpmntSerial},
+			EQPMNT_STS_TCD	= #{eqpmntStsTcd},
+			EQPMNT_INFO 	= #{eqpmntInfo},
+			EQPMNT_TCD 		= #{eqpmntTcd},
+			EQPMNT_IS_USE 	= #{eqpmntIsUse}
+		WHERE EQPMNT_SQ 	= #{eqpmntSq}
+	]]>
+</update>
+
+</mapper>

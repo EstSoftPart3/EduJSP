@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="erpMember">
+	
+	<!-- ################### 직원리스트 불러오기 ################### -->
+	<select id="selectMemberList" parameterType="hashmap" resultType="com.erp.admin.humanresources.member.vo.ErpMemberVo">
+		<![CDATA[
+			SELECT
+				M.EMPLY_SQ,
+				M.EMPLY_NM,
+				M.CNTRC_TCD,
+				M.DEPT_TCD,
+				M.RNK_TCD,
+				M.EMPLY_PH_NUM,
+				M.EMPLY_EML,
+				M.ISWORK
+			FROM EDUCATION.TB_EEP_EMPLY_M M
+		]]>
+		<where>
+		    <if test="DEPT_TCD != 'all'">
+		    	AND DEPT_TCD LIKE CONCAT('%', #{DEPT_TCD}, '%')
+		    </if>
+		    <if test="RNK_TCD != 'all'">
+		    	AND RNK_TCD LIKE CONCAT('%', #{RNK_TCD}, '%')
+		    </if>
+		    <if test="ISWORK != 'all'">
+		    	AND ISWORK LIKE CONCAT('%', #{ISWORK}, '%')
+		    </if>
+		    <if test="KEYWORD != null">
+		    	AND (
+			    	EMPLY_NM LIKE CONCAT('%', #{KEYWORD}, '%')
+			    	OR EMPLY_PH_NUM LIKE CONCAT('%', #{KEYWORD}, '%')
+			    	OR EMPLY_EML LIKE CONCAT('%', #{KEYWORD}, '%') 
+		    	)
+		    </if>
+		</where>
+		ORDER BY EMPLY_SQ DESC
+        LIMIT #{start}, #{end}
+	</select>
+	
+	<!-- 직원 수 세기 (페이징용) -->
+	<select id="countMemberList" resultType="int">
+		<![CDATA[
+			SELECT COUNT(EMPLY_SQ) AS COUNT 
+			FROM TB_EEP_EMPLY_M
+		]]>
+	</select>
+	
+	
+	<!-- ################### 직원 정보 불러오기 ################### -->
+	<!-- SELECT TB_EEP_EMPLY_M -->
+	<select id="selectMemberDetail" parameterType="int" resultType="com.erp.admin.humanresources.member.vo.ErpMemberVo">
+		<![CDATA[
+			SELECT * 
+			FROM EDUCATION.TB_EEP_EMPLY_M
+			WHERE EMPLY_SQ = #{EMPLY_SQ}
+		]]> 
+	</select>
+	
+	<!-- SELECT TB_EEP_EMPLY_DOC_S -->
+	<select id="selectMemberDoc" parameterType="int" resultType="com.erp.admin.humanresources.member.vo.ErpMemberDocumentVo">
+		<![CDATA[
+			SELECT * 
+			FROM TB_EEP_EMPLY_DOC_S
+			WHERE EMPLY_SQ = #{EMPLY_SQ}
+			AND IS_SAVE = 1
+		]]>
+	</select>
+	
+	<!-- SELECT TB_EEP_EMPLY_EDUCTN_S -->
+	<select id="selectMemberEdu" parameterType="int" resultType="com.erp.admin.humanresources.member.vo.ErpMemberEducationVo">
+		<![CDATA[
+			SELECT * 
+			FROM TB_EEP_EMPLY_EDUCTN_S
+			WHERE EMPLY_SQ = #{EMPLY_SQ}
+		]]>
+	</select>
+	
+	<!-- SELECT TB_EEP_EMPLY_CARR_S -->
+	<select id="selectMemberCarr" parameterType="int" resultType="com.erp.admin.humanresources.member.vo.ErpMemberCareerVo">
+		<![CDATA[
+			SELECT * 
+			FROM TB_EEP_EMPLY_CARR_S
+			WHERE EMPLY_SQ = #{EMPLY_SQ}
+		]]>
+	</select>
+	
+	<!-- SELECT TB_EEP_EMPLY_CERTFCTN_S -->
+	<select id="selectMemberCertf" parameterType="int" resultType="com.erp.admin.humanresources.member.vo.ErpMemberCertificationVo">
+		<![CDATA[
+			SELECT * 
+			FROM TB_EEP_EMPLY_CERTFCTN_S
+			WHERE EMPLY_SQ = #{EMPLY_SQ}
+		]]>
+	</select>
+	
+	<!-- SELECT TB_EEP_EMPLY_OA_S -->
+	<select id="selectMemberOA" parameterType="int" resultType="com.erp.admin.humanresources.member.vo.ErpMemberOAVo">
+		<![CDATA[
+			SELECT * 
+			FROM TB_EEP_EMPLY_OA_S
+			WHERE EMPLY_SQ = #{EMPLY_SQ}
+		]]>
+	</select>
+	
+	
+	
+	<!-- ################### 새로운 직원 추가 ################### -->
+	<!-- 저장될 직원번호 불러오기 -->
+	<select id="getSqNextval" resultType="int">
+		<![CDATA[
+			SELECT MAX(EMPLY_SQ)
+			FROM EDUCATION.TB_EEP_EMPLY_M;
+		]]> 
+	</select>
+	
+	<!-- TB_EEP_EMPLY_M -->
+	<insert id="insertMember" parameterType="com.erp.admin.humanresources.member.vo.ErpMemberVo">
+	<![CDATA[
+		INSERT INTO TB_EEP_EMPLY_M (
+			EMPLY_NM,
+			EMPLY_ID,
+			EMPLY_PW,
+			DEPT_TCD,
+			RNK_TCD,
+			EMPLY_ADDR,
+			EMPLY_RRN,
+			EMPLY_EML,
+			EMPLY_PH_NUM,
+			EMPLY_BNK,
+			EMPLY_ACCT,
+			CNTRC_TCD,
+			CNTRC_STRT_DT,
+			CNTRC_TRNST_DT,
+			CNTRC_END_DT,
+			EMPLY_ECN_RELATN_TCD1,
+			EMPLY_ECN_RELATN_NUM1,
+			EMPLY_ECN_RELATN_TCD2,
+			EMPLY_ECN_RELATN_NUM2,
+			EMPLY_NOTE
+		)
+		VALUES (
+			#{EMPLY_NM} ,
+			#{EMPLY_ID} ,
+			#{EMPLY_PW} ,
+			#{DEPT_TCD} ,
+			#{RNK_TCD} ,
+			#{EMPLY_ADDR} ,
+			#{EMPLY_RRN} ,
+			#{EMPLY_EML} ,
+			#{EMPLY_PH_NUM} ,
+			#{EMPLY_BNK} ,
+			#{EMPLY_ACCT} ,
+			#{CNTRC_TCD} ,
+			#{CNTRC_STRT_DT} ,
+			#{CNTRC_TRNST_DT} ,
+			#{CNTRC_END_DT} ,
+			#{EMPLY_ECN_RELATN_TCD1} ,
+			#{EMPLY_ECN_RELATN_NUM1} ,
+			#{EMPLY_ECN_RELATN_TCD2} ,
+			#{EMPLY_ECN_RELATN_NUM2} ,
+			#{EMPLY_NOTE}
+		)
+	]]>
+	</insert>
+	
+	
+	
+	<!-- TB_EEP_EMPLY_EDUCTN_S -->
+	<insert id="insertMemberEductn" parameterType="com.erp.admin.humanresources.member.vo.ErpMemberEducationVo">
+	<![CDATA[
+		INSERT INTO TB_EEP_EMPLY_EDUCTN_S (
+			EMPLY_SQ,
+			EDUCTN_FNL,
+			EDUCTN_MJR,
+			EDUCTN_GRDTD_DT,
+			EDUCTN_LC
+		)
+		VALUES (
+			#{EMPLY_SQ},
+			#{EDUCTN_FNL},
+			#{EDUCTN_MJR},
+			#{EDUCTN_GRDTD_DT},
+			#{EDUCTN_LC}
+		)
+	]]>
+	</insert>
+	
+	<!-- TB_EEP_EMPLY_CARR_S -->
+	<insert id="insertMemberCarr" parameterType="com.erp.admin.humanresources.member.vo.ErpMemberCareerVo">
+	<![CDATA[
+		INSERT INTO TB_EEP_EMPLY_CARR_S (
+			EMPLY_SQ,
+			CARR_NM,
+			CARR_DT,
+			CARR_RNK,
+			CARR_WRK,
+			CARR_LC,
+			CARR_RSGNT,
+			CARR_SLRY
+		)
+		VALUES (
+			#{EMPLY_SQ   },
+			#{CARR_NM    },
+			#{CARR_DT    },
+			#{CARR_RNK   },
+			#{CARR_WRK   },
+			#{CARR_LC    },
+			#{CARR_RSGNT },
+			#{CARR_SLRY  }
+		)
+		]]>
+	</insert>
+	
+	<!-- TB_EEP_EMPLY_CERTFCTN_S -->
+	<insert id="insertMemberCertfctn" parameterType="com.erp.admin.humanresources.member.vo.ErpMemberCertificationVo">
+	<![CDATA[
+		INSERT INTO TB_EEP_EMPLY_CERTFCTN_S (
+			EMPLY_SQ,
+			CERTFCTN_NM,
+			CERTFCTN_LC,
+			CERTFCTN_DT
+		)
+		VALUES (
+			#{EMPLY_SQ     },
+			#{CERTFCTN_NM  },
+			#{CERTFCTN_LC  },
+			#{CERTFCTN_DT  }
+		)
+	]]>
+	</insert>
+	
+	<!-- TB_EEP_EMPLY_OA_S -->
+	<insert id="insertMemberOA" parameterType="com.erp.admin.humanresources.member.vo.ErpMemberOAVo">
+	<![CDATA[
+		INSERT INTO TB_EEP_EMPLY_OA_S (
+			EMPLY_SQ,
+			OA_DVSN,
+			OA_NM,
+			OA_ORGNZ,
+			OA_DT,
+			OA_DTL
+		)
+		VALUES (
+			#{EMPLY_SQ },
+			#{OADVSN  },
+			#{OANM    },
+			#{OAORGNZ },
+			#{OADT    },
+			#{OADTL   }
+		)
+	]]>
+	</insert>
+	
+	<!-- TB_EEP_EMPLY_DOC_S -->
+	<insert id="insertMemberDoc" parameterType="com.erp.admin.humanresources.member.vo.ErpMemberDocumentVo">
+	<![CDATA[
+		INSERT INTO TB_EEP_EMPLY_DOC_S (
+			EMPLY_SQ,
+			DOC_ORG_FILE,
+			DOC_STR_FILE
+		)
+		VALUES (
+			#{EMPLY_SQ},
+			#{DOC_ORG_FILE},
+			#{DOC_STR_FILE}
+		)
+		]]>
+	</insert>
+	
+	<!-- ################### 직원 삭제 ################### -->
+	<!-- TB_EEP_EMPLY_M -->
+	<delete id="deleteMember" parameterType="int">
+		<![CDATA[
+			DELETE FROM TB_EEP_EMPLY_M
+			WHERE EMPLY_SQ = #{EMPLY_SQ}
+		]]>
+	</delete>
+	
+	<!-- ################### 퇴사 처리 ################### -->
+	<!-- TB_EEP_EMPLY_M -->
+	  <update id="fireHim" parameterType="int">
+		<![CDATA[
+			UPDATE
+                TB_EEP_EMPLY_M
+            SET
+	           	ISWORK=0
+	           	CNTRC_END_DT=SYSDATE
+	        WHERE EMPLY_SQ = #{EMPLY_SQ}
+		]]>
+	</update>
+	
+	
+	<!-- ################### 파일정보 가져오기(다운용) ################### -->
+	<!-- 파일정보 가져오기 -->
+	<select id="selectFileInfo" parameterType="int" resultType="hashMap">
+		SELECT 
+			  DOC_STR_FILE
+			, DOC_ORG_FILE
+		FROM 
+			TB_EEP_EMPLY_DOC_S
+		WHERE 
+			DOC_SQ = #{DOC_SQ}
+	</select>
+	
+	
+	<!-- ################### 직원정보 수정 ################### -->
+	<!-- TB_EEP_EMPLY_M -->
+    <update id="updateMember" parameterType="com.erp.admin.humanresources.member.vo.ErpMemberVo">
+        <![CDATA[
+            UPDATE
+                TB_EEP_EMPLY_M
+            SET
+	           	EMPLY_NM=               #{EMPLY_NM} ,
+				EMPLY_ID=               #{EMPLY_ID} ,
+				EMPLY_PW=               #{EMPLY_PW} ,
+				DEPT_TCD=               #{DEPT_TCD} ,
+				RNK_TCD=                #{RNK_TCD} ,
+				EMPLY_ADDR=             #{EMPLY_ADDR} ,
+				EMPLY_RRN=              #{EMPLY_RRN} ,
+				EMPLY_EML=              #{EMPLY_EML} ,
+				EMPLY_PH_NUM=           #{EMPLY_PH_NUM} ,
+				EMPLY_BNK=              #{EMPLY_BNK} ,
+				EMPLY_ACCT=             #{EMPLY_ACCT} ,
+				CNTRC_TCD=              #{CNTRC_TCD} ,
+				CNTRC_STRT_DT=          #{CNTRC_STRT_DT} ,
+				CNTRC_TRNST_DT=         #{CNTRC_TRNST_DT} ,
+				CNTRC_END_DT=           #{CNTRC_END_DT} ,
+				EMPLY_ECN_RELATN_TCD1 = #{EMPLY_ECN_RELATN_TCD1} ,
+				EMPLY_ECN_RELATN_NUM1 = #{EMPLY_ECN_RELATN_NUM1} ,
+				EMPLY_ECN_RELATN_TCD2 = #{EMPLY_ECN_RELATN_TCD2} ,
+				EMPLY_ECN_RELATN_NUM2 = #{EMPLY_ECN_RELATN_NUM2} ,
+				EMPLY_NOTE=             #{EMPLY_NOTE}
+            WHERE
+            	EMPLY_SQ = #{EMPLY_SQ}
+        ]]>
+    </update>
+	
+	<!-- @@@@@@@@@ 리스트 데이터 : 기존데이터 삭제 , 새로운 데이터 입력 @@@@@@@@@ -->
+	<!-- 기존 데이터 삭제 (인서트는 위에꺼로) -->
+	<!-- TB_EEP_EMPLY_EDUCTN_S  -->
+	<delete id="deleteMemberEductn" parameterType="int">
+		<![CDATA[
+			DELETE FROM TB_EEP_EMPLY_EDUCTN_S
+			WHERE EMPLY_SQ = #{EMPLY_SQ}
+		]]>
+	</delete>
+	
+	<!-- TB_EEP_EMPLY_CARR_S   -->
+	<delete id="deleteMemberCarr" parameterType="int">
+		<![CDATA[
+			DELETE FROM TB_EEP_EMPLY_CARR_S 
+			WHERE EMPLY_SQ = #{EMPLY_SQ}
+		]]>
+	</delete>
+	
+	<!-- TB_EEP_EMPLY_CERTFCTN_S   -->
+	<delete id="deleteMemberCertfctn" parameterType="int">
+		<![CDATA[
+			DELETE FROM TB_EEP_EMPLY_CERTFCTN_S 
+			WHERE EMPLY_SQ = #{EMPLY_SQ}
+		]]>
+	</delete>
+	
+	<!-- TB_EEP_EMPLY_OA_S    -->
+	<delete id="deleteMemberOA" parameterType="int">
+		<![CDATA[
+			DELETE FROM TB_EEP_EMPLY_OA_S  
+			WHERE EMPLY_SQ = #{EMPLY_SQ}
+		]]>
+	</delete>
+	
+	<!-- @@@@@@@@@ 파일 데이터 : 기존데이터 상태 변경, 새로운 데이터 업데이트  @@@@@@@@@ -->
+	<!-- 기존데이터 상태 변경  -->
+    <update id="updateFileToUnUse" parameterType="com.erp.admin.humanresources.member.vo.ErpMemberDocumentVo">
+        <![CDATA[
+            UPDATE
+                TB_EEP_EMPLY_DOC_S 
+            SET
+	          IS_SAVE = 0
+            WHERE
+            	DOC_SQ = #{DOC_SQ}
+        ]]>
+    </update>
+	
+	
+	
+</mapper>

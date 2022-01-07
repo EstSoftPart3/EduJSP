@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="file">
+	
+	
+	
+	<insert id="insertFile" parameterType="com.file.vo.FileVo">
+		<![CDATA[
+			INSERT INTO EDUCATION.TB_EST_FILE (
+				MBR_ID
+			)VALUES (
+				#{mbrId}
+			)
+		]]>
+	</insert>
+	
+	
+	<select id="selectFilelistOne" parameterType="hashmap" resultType="com.file.vo.FileVo">
+		<![CDATA[
+			SELECT 
+				MBR_ID
+				, ORG_FILENM_1
+				, STR_FILENM_1	
+				, ORG_FILENM_2	
+				, STR_FILENM_2	
+				, ORG_FILENM_3	
+				, STR_FILENM_3	
+				, ORG_FILENM_4	
+				, STR_FILENM_4	
+				, ORG_FILENM_5	
+				, STR_FILENM_5	
+				, FILE_PATH_1 
+				, FILE_PATH_2	
+				, FILE_PATH_3	
+				, FILE_PATH_4	
+				, FILE_PATH_5
+			FROM TB_EST_FILE
+			WHERE MBR_ID = #{mbrId}
+		]]>
+	</select>
+	
+	<update id="updateFile_1" parameterType="hashmap">
+		<![CDATA[
+			UPDATE EDUCATION.TB_EST_FILE
+			SET ORG_FILENM_1= #{org_fileNm_1}
+				, STR_FILENM_1 = #{str_fileNm_1}
+				, FILE_PATH_1 = #{file_path_1}
+			WHERE MBR_ID = #{mbrId}
+		]]>
+	</update>
+	
+	<update id="updateFile_2" parameterType="hashmap">
+		<![CDATA[
+			UPDATE EDUCATION.TB_EST_FILE
+			SET ORG_FILENM_2= #{org_fileNm_2}
+				, STR_FILENM_2 = #{str_fileNm_2}
+				, FILE_PATH_2 = #{file_path_2}
+			WHERE MBR_ID = #{mbrId}
+		]]>
+	</update>
+	
+	<update id="updateFile_3" parameterType="hashmap">
+		<![CDATA[
+			UPDATE EDUCATION.TB_EST_FILE
+			SET ORG_FILENM_3= #{org_fileNm_3}
+				, STR_FILENM_3 = #{str_fileNm_3}
+				, FILE_PATH_3 = #{file_path_3}
+			WHERE MBR_ID = #{mbrId}
+		]]>
+	</update>
+	
+	<update id="updateFile_4" parameterType="hashmap">
+		<![CDATA[
+			UPDATE EDUCATION.TB_EST_FILE
+			SET ORG_FILENM_4= #{org_fileNm_4}
+				, STR_FILENM_4 = #{str_fileNm_4}
+				, FILE_PATH_4 = #{file_path_4}
+			WHERE MBR_ID = #{mbrId}
+		]]>
+	</update>
+	
+	<update id="updateFile_5" parameterType="hashmap">
+		<![CDATA[
+			UPDATE EDUCATION.TB_EST_FILE
+			SET ORG_FILENM_5= #{org_fileNm_5}
+				, STR_FILENM_5 = #{str_fileNm_5}
+				, FILE_PATH_5 = #{file_path_5}
+			WHERE MBR_ID = #{mbrId}
+		]]>
+	</update>
+	
+
+</mapper>

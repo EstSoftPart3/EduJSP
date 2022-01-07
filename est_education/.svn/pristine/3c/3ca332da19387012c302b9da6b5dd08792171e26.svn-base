@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="quick">
+	
+	
+	<select id="selectQuickList" parameterType="hashmap" resultType="com.quick.vo.QuickVo">
+		<![CDATA[
+				SELECT
+					 QCK_SQ
+					,QCK_DTM			
+					,QCK_MEMO
+					,QCK_PAYMNT_AMT
+					,QCK_PAYMNT_STTS
+					,QCK_PAYMNT_DT
+					,QCK_STRT_AREA
+					,QCK_END_AREA
+					,QCK_ARTCL_TCD
+					,QCK_RCPINT_NM
+				FROM EDUCATION.TB_EST_QCK
+		]]>
+	</select>
+		
+	<insert id="insertQuick" parameterType="com.quick.vo.QuickVo">
+		<![CDATA[
+			INSERT INTO EDUCATION.TB_EST_QCK (
+				   QCK_DTM  
+				 , QCK_RCPINT_NM
+				 , QCK_ARTCL_TCD
+				 , QCK_STRT_AREA
+				 , QCK_END_AREA
+				 , QCK_MEMO 
+			) VAlUES (
+				  #{qckDtm} 
+				, #{qckRcpintNm}
+				, #{qckArtclTcd}
+				, #{qckStrtArea}
+				, #{qckEndArea}
+				, #{qckMemo}
+			)
+		]]>
+	</insert>
+	
+	<select id="selectQuickOne" parameterType="String" resultType="com.quick.vo.QuickVo">
+		<![CDATA[
+			SELECT 
+			  QCK_SQ
+			, QCK_RCPINT_NM
+			, QCK_STRT_AREA
+			, QCK_END_AREA
+			, QCK_ARTCL_TCD
+			, QCK_PAYMNT_AMT
+			, QCK_PAYMNT_STTS
+			, QCK_PAYMNT_DT
+			, QCK_DTM
+			, QCK_MEMO
+			FROM EDUCATION.TB_EST_QCK 
+			WHERE QCK_SQ = #{qckSq}
+		]]>
+	</select>
+	
+	<update id="updateQuick" parameterType="com.quick.vo.QuickVo">
+		<![CDATA[
+			UPDATE EDUCATION.TB_EST_QCK 
+				SET
+			  QCK_DTM				= #{qckDtm}
+			, QCK_RCPINT_NM			= #{qckRcpintNm}
+			, QCK_ARTCL_TCD			= #{qckArtclTcd}
+			, QCK_STRT_AREA			= #{qckStrtArea}
+			, QCK_END_AREA			= #{qckEndArea}
+			, QCK_MEMO 				= #{qckMemo}
+			, QCK_PAYMNT_AMT		= #{qckPaymntAmt}
+			, QCK_PAYMNT_DT			= #{qckPaymntDt}
+			, QCK_PAYMNT_STTS		= #{qckPaymntStts}
+			WHERE QCK_SQ = #{qckSq}
+		]]>
+	</update>
+	
+	<delete id="deleteQuick" parameterType="String">
+		<![CDATA[
+			DELETE 
+			FROM EDUCATION.TB_EST_QCK 
+			WHERE QCK_SQ = #{qckSq}
+		]]>
+	</delete>
+	
+
+</mapper>

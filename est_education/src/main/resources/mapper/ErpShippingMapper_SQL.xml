@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="erpShppng">
+
+<!-- 배송 관리  -->
+<select id="selectShippingList" parameterType="hashmap" resultType="com.erp.admin.management.shipping.vo.ErpShippingVo">
+	<![CDATA[
+		SELECT 
+			S.SHPNG_SQ
+		,	S.SHPNG_DATE
+		,	S.SHPNG_RCPNT
+		,	S.SHPNG_SHOP
+		,	S.SHPNG_SHOP_PHNE_NMBR
+		,	S.SHPNG_GOODS
+		,	S.SHPNG_ALL_AMNT
+		,   (SELECT C.CODE_NM FROM TB_EST_CODE C WHERE S.SHPNG_PYMNT_STTS = C.CODE_COM_CD) AS SHPNG_PYMNT_STTS
+		,	S.SHPNG_PYMNT_DATE
+		
+			
+		FROM
+			EDU_JSP.TB_EEP_SHPNG S
+		]]>
+			 <where>
+			    <if test="keyword == '' and keyword == NULL">
+				    AND S.SHPNG_SQ > 0
+			    </if>
+			    <if test="searchOption != '' and searchOption == 'shpngRcpnt'">
+				    AND S.SHPNG_RCPNT LIKE CONCAT('%', #{search}, '%') AND S.SHPNG_SQ > 0
+			    </if>
+			     <if test="searchOption != '' and searchOption == 'shpngShop'">
+				    AND S.SHPNG_SHOP LIKE CONCAT('%', #{search}, '%') AND S.SHPNG_SQ > 0
+			    </if>
+			     <if test="searchOption != '' and searchOption == 'shpngGoods'">
+				    AND S.SHPNG_GOODS LIKE CONCAT('%', #{search}, '%') AND S.SHPNG_SQ > 0
+			    </if>
+			    <if test="startDt != '' and startDt != NULL and endDt != '' and endDt != NULL">
+			    	AND S.SHPNG_DATE <![CDATA[>=]]> #{startDt} AND S.SHPNG_DATE <![CDATA[<=]]> #{endDt} AND S.SHPNG_SQ > 0
+			 	</if>
+			</where>
+			
+		<![CDATA[		
+		ORDER BY
+			S.SHPNG_SQ DESC
+		LIMIT
+			#{start}, #{end}
+	]]>
+</select>
+
+<!-- 배송 상세  -->
+<select id="shippingDetail" parameterType="hashmap" resultType="com.erp.admin.management.shipping.vo.ErpShippingVo">
+	<![CDATA[
+		SELECT 
+			S.SHPNG_SQ
+		,	S.SHPNG_DATE
+		,	S.SHPNG_RCPNT
+		,	S.SHPNG_SHOP
+		,	S.SHPNG_SHOP_PHNE_NMBR
+		,	S.SHPNG_ORGN
+		,	S.SHPNG_DSTNT
+		,	S.SHPNG_GOODS
+		,	S.SHPNG_COUNT
+		,	S.SHPNG_COUNT_AMNT
+		,	S.SHPNG_ALL_AMNT
+		,   (SELECT C.CODE_NM FROM TB_EST_CODE C WHERE S.SHPNG_PYMNT_STTS = C.CODE_COM_CD) AS SHPNG_PYMNT_STTS
+		,	S.SHPNG_PYMNT_DATE
+		,   (SELECT C.CODE_NM FROM TB_EST_CODE C WHERE S.SHPNG_PYMNT_MTHD = C.CODE_COM_CD) AS SHPNG_PYMNT_MTHD
+		,   S.SHPNG_CONTENT
+		FROM
+			EDU_JSP.TB_EEP_SHPNG S
+		WHERE
+			S.SHPNG_SQ = #{shpngSq}
+	]]>
+</select>
+
+<!-- 배송 수정  -->
+<update id="shippingUpdate" parameterType="com.erp.admin.management.shipping.vo.ErpShippingVo" >
+	<![CDATA[
+		UPDATE
+			EDU_JSP.TB_EEP_SHPNG
+		SET
+			SHPNG_RCPNT          = #{shpngRcpnt}
+		,	SHPNG_SHOP           = #{shpngShop}
+		,	SHPNG_SHOP_PHNE_NMBR = #{shpngShopPhneNmbr}
+		,	SHPNG_ORGN           = #{shpngOrgn}
+		,	SHPNG_DSTNT          = #{shpngDstnt}
+		,	SHPNG_GOODS          = #{shpngGoods}
+		,	SHPNG_COUNT          = #{shpngCount}
+		,	SHPNG_COUNT_AMNT     = #{shpngCountAmnt}
+		,	SHPNG_ALL_AMNT       = #{shpngAllAmnt}
+		,	SHPNG_DATE       	 = #{shpngDate}
+		,	SHPNG_PYMNT_STTS 	 = #{shpngPymntStts} 
+		,   SHPNG_PYMNT_DATE	 = #{shpngPymntDate} 
+		,	SHPNG_PYMNT_MTHD 	 = #{shpngPymntMthd} 	
+		,	SHPNG_CONTENT  	 	 = #{shpngContent}
+		WHERE
+			SHPNG_SQ             = #{shpngSq} 		
+
+	]]>
+</update>	
+
+<!-- 배송 등록  -->
+<insert id="shippingInsert" parameterType="com.erp.admin.management.shipping.vo.ErpShippingVo">
+	<![CDATA[
+		INSERT INTO EDU_JSP.TB_EEP_SHPNG ( 
+			  SHPNG_RCPNT
+			, SHPNG_SHOP
+			, SHPNG_SHOP_PHNE_NMBR
+			, SHPNG_ORGN
+			, SHPNG_DSTNT
+			, SHPNG_GOODS
+			, SHPNG_COUNT  
+			, SHPNG_COUNT_AMNT
+			, SHPNG_ALL_AMNT
+			, SHPNG_PYMNT_STTS
+			, SHPNG_PYMNT_DATE
+			, SHPNG_PYMNT_MTHD
+			, SHPNG_DATE
+			, SHPNG_CONTENT 
+			)
+			VALUES (
+			  #{shpngRcpnt}
+			, #{shpngShop}
+			, #{shpngShopPhneNmbr}
+			, #{shpngOrgn}
+			, #{shpngDstnt}
+			, #{shpngGoods}
+			, #{shpngCount}
+			, #{shpngCountAmnt}
+			, #{shpngAllAmnt}
+			, #{shpngPymntStts}
+			, #{shpngPymntDate}
+			, #{shpngPymntMthd}
+			, #{shpngDate}
+			, #{shpngContent} )
+	]]>
+</insert>
+
+<!-- 배송 삭제  -->
+<delete id="shippingDelete" parameterType="hashmap">
+	<![CDATA[
+		DELETE FROM EDU_JSP.TB_EEP_SHPNG
+		WHERE SHPNG_SQ = #{shpngSq}
+	]]>
+</delete>
+
+<!-- 배송 카운트 -->
+<select id="shippingCount" resultType="int" parameterType="com.erp.admin.management.shipping.vo.ErpShippingVo">
+	<![CDATA[
+		SELECT 
+        	COUNT(SHPNG_SQ)
+        FROM 
+        	EDU_JSP.TB_EEP_SHPNG	
+        ]]>
+         <where>
+			    <if test="search == '' and search == 'NULL'">
+				    AND SHPNG_SQ > 0
+			    </if>
+			    <if test="searchOption != '' and searchOption == 'shpngRcpnt'">
+				    AND SHPNG_RCPNT LIKE CONCAT('%', #{search}, '%') AND SHPNG_SQ > 0
+			    </if>
+			     <if test="searchOption != '' and searchOption == 'shpngShop'">
+				    AND SHPNG_SHOP LIKE CONCAT('%', #{search}, '%') AND SHPNG_SQ > 0
+			    </if>
+			     <if test="searchOption != '' and searchOption == 'shpngGoods'">
+				    AND SHPNG_GOODS LIKE CONCAT('%', #{search}, '%') AND SHPNG_SQ > 0
+			    </if>
+			    <if test="startDt != null and startDt != '' and endDt != null and  endDt != ''" >
+			    	AND SHPNG_DATE <![CDATA[>=]]> #{startDt} AND SHPNG_DATE <![CDATA[<=]]> #{endDt} AND SHPNG_SQ > 0
+			 	</if>
+			</where>
+	
+</select>
+	</mapper>

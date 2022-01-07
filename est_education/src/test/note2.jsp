@@ -1,0 +1,1 @@
+http://localhost//ic3/selectIc3learningTypeList.do?usrId=%22myengu@hanmail.net%22&crsTcd=%22FRBG%22&subcrsTcd=%22PEOFF%22

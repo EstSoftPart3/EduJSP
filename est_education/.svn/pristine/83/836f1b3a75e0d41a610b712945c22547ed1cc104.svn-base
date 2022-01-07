@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sampleBoard">
+	
+	<!-- 샘플 게시글 목록 -->
+    <select id="sampleBoardList" parameterType="hashmap" resultType="com.sampleBoard.vo.BoardSampleVo">
+        <![CDATA[
+	        SELECT
+	              BNO
+	            , TITLE
+	            , CONTENT
+	            , WRITER
+	            , REGDATE
+	            , VIEWCNT
+	        FROM 
+	        	EDUCATION.TB_EST_SAMPLE_BORAD 
+        ]]>
+    </select>
+    
+    <select id="sampleBoardPagingList" parameterType="hashmap" resultType="com.sampleBoard.vo.BoardSampleVo">
+        <![CDATA[
+	        SELECT
+	              BNO
+	            , TITLE
+	            , CONTENT
+	            , WRITER
+	            , REGDATE
+	            , VIEWCNT
+	        FROM 
+	        	EDUCATION.TB_EST_SAMPLE_BORAD
+	        ]]>
+	        <where>
+			    <if test="keyword == '' and keyword == NULL">
+				    BNO > 0
+			    </if>
+			    <if test="keyword != '' and keyword != NULL">
+				    BNO > 0 AND TITLE LIKE CONCAT('%', #{keyword}, '%') 
+			    </if>
+			</where>
+			<![CDATA[
+			ORDER BY BNO DESC, REGDATE DESC
+			LIMIT #{start}, #{end}
+			 ]]>
+    </select>
+    
+    <!-- 샘플게시판 상세조회 -->
+    <select id="sampleBoardDetail" parameterType="String" resultType="com.sampleBoard.vo.BoardSampleVo">
+        <![CDATA[
+            SELECT
+                  BNO
+	            , TITLE
+	            , CONTENT
+	            , WRITER
+	            , REGDATE
+	            , VIEWCNT
+            FROM
+                EDUCATION.TB_EST_SAMPLE_BORAD
+            WHERE
+                BNO = #{bno}
+        ]]>
+    </select>
+     
+    <!-- 샘플 게시판 작성 -->
+    <insert id="sampleBoardInsert" parameterType="com.sampleBoard.vo.BoardSampleVo">
+    	 <selectKey keyProperty="bno" resultType="int" order="BEFORE">
+	    	SELECT MAX(BNO)+1 from TB_EST_SAMPLE_BORAD
+	    </selectKey>
+        <![CDATA[
+            INSERT EDUCATION.TB_EST_SAMPLE_BORAD
+            (
+               	  TITLE
+	            , CONTENT
+	            , WRITER
+            )
+            VALUES
+            (
+                  #{title}
+                , #{content}
+                , #{writer}
+            )
+        ]]>
+    </insert>
+    
+    <!-- 샘플 게시판 수정 -->
+    <update id="sampleBoardUpdate" parameterType="com.sampleBoard.vo.BoardSampleVo">
+        <![CDATA[
+            UPDATE
+                EDUCATION.TB_EST_SAMPLE_BORAD
+            SET
+                  TITLE = #{title}
+                , CONTENT = #{content}
+                , REGDATE = NOW()
+            WHERE
+                BNO = #{bno} AND WRITER = #{writer}
+        ]]>
+    </update>
+    
+    <!-- 샘플 게시판 삭제 -->
+    <delete id="sampleBoardDelete" parameterType="com.sampleBoard.vo.BoardSampleVo">
+        <![CDATA[
+            DELETE 
+			FROM EDUCATION.TB_EST_SAMPLE_BORAD
+			WHERE BNO = #{bno}
+        ]]>
+    </delete>
+    
+    <!-- 샘플 게시판 조회 수 카운트 -->
+    <update id="sampleBoardDetailHit" parameterType="com.sampleBoard.vo.BoardSampleVo">
+        <![CDATA[
+            UPDATE
+                EDUCATION.TB_EST_SAMPLE_BORAD
+            SET
+                VIEWCNT = VIEWCNT + 1
+            WHERE
+                BNO = #{bno}
+        ]]>
+    </update>
+
+    <!-- 샘플 게시글 전체 갯수 -->
+    <select id="sampleBoardCountList" resultType="int" parameterType="String">
+        <![CDATA[
+	        SELECT 
+	        	COUNT(BNO)
+	        FROM 
+	        	EDUCATION.TB_EST_SAMPLE_BORAD
+	        WHERE
+	            BNO > 0 AND TITLE LIKE CONCAT('%', #{keyword}, '%')
+        ]]>
+    </select>
+    
+    <!-- 샘플 게시판 엑셀 업로드 -->
+    <insert id="sampleBoardExcelInsert" parameterType="hashmap">
+        <![CDATA[
+            INSERT EDUCATION.TB_EST_SAMPLE_BORAD
+            (
+               	  TITLE
+	            , CONTENT
+	            , WRITER
+            )
+            VALUES
+            (
+                  #{TITLE}
+                , #{CONTENT}
+                , #{WRITER}
+            )
+        ]]>
+    </insert>
+    
+    <!-- 샘플 게시판 파일 저장 -->
+    <insert id="insertFile" parameterType="hashMap">
+    <selectKey keyProperty="bno" resultType="int" order="BEFORE">
+	    	SELECT MAX(BNO) from TB_EST_SAMPLE_BORAD
+	    </selectKey>
+		INSERT INTO TB_EST_SAMPLE_FILE(
+			  BNO
+			, ORG_FILE_NAME
+			, STORED_FILE_NAME
+			, FILE_SIZE
+		)VALUES(
+			  #{bno}
+			, #{ORG_FILE_NAME}
+			, #{STORED_FILE_NAME}
+			, #{FILE_SIZE}
+		)
+    </insert>
+    
+    <!-- 샘플 게시판 파일 목록 -->
+    <select id="selectFileList" parameterType="int" resultType="hashMap">
+		SELECT 
+			  FILE_NO
+			, ORG_FILE_NAME
+			, ROUND(FILE_SIZE/1024, 1) AS FILE_SIZE
+		FROM 
+			TB_EST_SAMPLE_FILE
+		WHERE
+			BNO = #{BNO}
+		AND 
+			DEL_GB = 'N'
+		ORDER BY FILE_NO ASC
+	</select>
+	
+	<!-- 샘플 게시판 파일 정보 -->
+	<select id="selectFileInfo" parameterType="hashMap" resultType="hashMap">
+		SELECT 
+			  STORED_FILE_NAME
+			, ORG_FILE_NAME
+		FROM 
+			TB_EST_SAMPLE_FILE
+		WHERE 
+			FILE_NO = #{FILE_NO}
+	</select>
+	
+	<!-- 샘플 게시판 파일 업로드 -->
+	<update id="updateFile" parameterType="hashMap">
+    	UPDATE 
+    		TB_EST_SAMPLE_FILE 
+    	SET
+    		DEL_GB = 'Y'
+    	WHERE 
+    		FILE_NO = #{FILE_NO}
+    </update>
+	
+</mapper>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="question">
+	
+	
+	<select id="selectQuestionList" parameterType="hashmap" resultType="com.question.vo.QuestionVo">
+		<![CDATA[
+			SELECT
+			 BP_NO
+			,BP_TTL			
+			,BP_CTT
+			,BP_RGL
+			,date_format(BP_RGTD, '%Y-%m-%d') AS BP_RGTD
+			,date_format(BP_MDFD, '%Y-%m-%d') AS BP_MDFD
+			FROM EDU_JSP.TB_EST_BP
+	]]>
+</select>
+
+<insert id="insertQuestion" parameterType="com.question.vo.QuestionVo">
+	<![CDATA[
+		INSERT INTO EDU_JSP.TB_EST_BP (
+			 BP_TTL			
+			,BP_CTT
+			,BP_RGL
+		) VALUES (
+			 #{bpTtl}
+			, #{bpCtt}
+			, #{bpRgl}
+		)
+	]]>
+</insert>
+
+<select id="selectQuestionDetail" parameterType="hashmap" resultType="com.question.vo.QuestionVo">
+	<![CDATA[
+			SELECT
+			 BP_NO
+			,BP_TTL			
+			,BP_CTT
+			,BP_RGL
+			,BP_RGTD
+			,BP_MDFD
+			FROM EDU_JSP.TB_EST_BP
+			WHERE BP_NO=#{bpNo}
+	]]>
+</select>
+
+	<update id="UpdateQuestion" parameterType="com.question.vo.QuestionVo" >
+	<![CDATA[
+			UPDATE EDU_JSP.TB_EST_BP SET
+			 BP_TTL	  =   #{bpTtl}	
+			,BP_CTT   =   #{bpCtt} 
+			,BP_MDFD  =   NOW() 
+			WHERE BP_NO=  #{bpNo} 
+	]]>
+	</update>
+	
+	<delete id="DeleteQuestion" parameterType="com.question.vo.QuestionVo">
+		<![CDATA[
+			DELETE FROM EDU_JSP.TB_EST_BP
+			WHERE BP_NO = #{bpNo}
+		]]>
+	</delete>
+	
+	<select id="AnswerList" parameterType="hashmap" resultType="com.question.vo.AnswerVo">
+		<![CDATA[
+		
+	      	SELECT
+			 BAS_NO
+			,BP_NO
+			,BAS_TTL			
+			,BAS_CTT
+			,BAS_RGL
+			,date_format(BAS_RGTD, '%Y-%m-%d') AS BAS_RGTD
+			,date_format(BAS_MDFD, '%Y-%m-%d') AS BAS_MDFD
+			FROM EDU_JSP.TB_EST_BAS
+			WHERE BP_NO = #{bpNo}
+			
+	]]>
+</select>
+
+</mapper>

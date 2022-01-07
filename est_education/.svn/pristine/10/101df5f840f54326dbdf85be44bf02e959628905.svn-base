@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTDMapper3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="equipmentLentalMapper">
+    <select id="selectEquipmentLentalList" parameterType="hashmap" resultType="com.equipmentLental.vo.EquipmentLentalVo">
+        SELECT  T1.LNTL_SQ,T1.EQPMNT_SQ, T1.MBR_SQ, T1.LNTL_STRT_DATE,  T1.LNTL_RTRN_DATE, T1.LNTL_MEMO,T2.EQPMNT_TCD,T2.EQPMNT_IS_USE                               
+        		  FROM EDUCATION.TB_EST_EQPMNT_LNTL  T1                             
+        		  LEFT OUTER JOIN EDUCATION.TB_EST_EQPMNT  T2               
+        		  ON (T1.eqpmnt_sq = T2.eqpmnt_sq)          
+              		  where T1.LNTL_SQ > 0
+    </select>
+    <insert id="insertEquipmentLental" parameterType="com.equipmentLental.vo.EquipmentLentalVo">
+        <selectKey keyProperty="lntlSq" resultType="int" order="BEFORE">
+            SELECT IFNULL(MAX(LNTL_SQ) + 1 , 1) FROM EDUCATION.TB_EST_EQPMNT_LNTL
+            <!-- <if test="MAX(LNTL_SQ) == NULL">
+            						lntlSq = 1;
+            					</if> -->
+        </selectKey>
+        INSERT INTO EDUCATION.TB_EST_EQPMNT_LNTL(
+        				LNTL_SQ,
+        				EQPMNT_SQ,
+        				MBR_SQ,
+        				LNTL_STRT_DATE,
+        				LNTL_RTRN_DATE,
+        				LNTL_MEMO
+        			    ) 
+        			 VALUES(
+        				#{lntlSq},
+        				#{eqpmntSq}, 
+        				#{mbrSq}, 
+        				#{lntlStrtDate}, 
+        				#{lntlRtrnDate}, 
+        				#{lntlMemo}
+        				)
+    </insert>
+    <delete id="deleteEquipmentLental" parameterType="String">
+        <![CDATA[
+						DELETE 
+						FROM EDUCATION.TB_EST_EQPMNT_LNTL
+						WHERE LNTL_SQ = #{lntlSq}
+					]]>
+    </delete>
+    <select id="selectEquipmentLentalOne" parameterType="hashmap" resultType="com.equipmentLental.vo.EquipmentLentalVo">
+        <![CDATA[
+					SELECT
+									 T1.LNTL_SQ
+									, T1.EQPMNT_SQ
+									, T2.EQPMNT_TCD
+									, T3.MBR_SQ
+									,T3.MBR_NM
+									,T1.LNTL_STRT_DATE
+									,T1.LNTL_RTRN_DATE
+									,T1.LNTL_MEMO
+								   
+					    FROM  EDUCATION.TB_EST_EQPMNT  T2 
+					    		INNER JOIN EDUCATION.TB_EST_EQPMNT_LNTL  T1
+					       		ON T2.EQPMNT_SQ =  T1.EQPMNT_SQ
+					      		 INNER JOIN EDUCATION.TB_EST_MBR T3
+					       			ON T1.MBR_SQ = T3.MBR_SQ
+					    WHERE     T1.LNTL_SQ =  #{lntlSq}
+	]]>
+    </select>
+    <update id="updateEquipmentLental" parameterType="com.equipmentLental.vo.EquipmentLentalVo">
+        <![CDATA[
+					UPDATE  EDUCATION.TB_EST_EQPMNT_LNTL
+					  SET
+					   
+					    LNTL_RTRN_DATE	   = #{lntlRtrnDate}, 
+					    LNTL_MEMO          = #{lntlMemo}
+					WHERE LNTL_SQ      = #{lntlSq}
+				]]>
+    </update>
+    <select id="selectPsblEquipmentList" parameterType="Map" resultType="com.equipment.vo.EquipmentVo">
+        <![CDATA[
+		select EQPMNT_SQ, EQPMNT_MNG_NUM, EQPMNT_TCD, EQPMNT_IS_USE
+		 from TB_EST_EQPMNT
+		 where EQPMNT_IS_USE = 'N'
+
+	]]>
+    </select>
+    <select id="selectMemberList" parameterType="Map" resultType="com.member.vo.MemberVo">
+        select MBR_SQ,MBR_DPRTMT_CD,MBR_POSITN_CD,MBR_NM
+        			from TB_EST_MBR
+    </select>
+</mapper>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project">
+	<!-- 멤버 - 목록 조회 -->
+	<select id="selectprojectList" parameterType="hashmap" resultType="com.project.vo.ProjectVo">
+		<![CDATA[
+			SELECT 
+				  PRJCT_SQ
+				  ,MBR_SQ
+				  ,PRJCT_NM
+				  ,PRJCT_TYP_CD
+				  ,PRJCT_START_DT
+				  ,PRJCT_END_DT
+				  ,PRJCT_ADDR
+			FROM EDU_JSP.TB_EST_PRJCT
+		]]>
+		<where>
+			<if test="PRJCT_TYP_CD != NULL">
+		    	PRJCT_TYP_CD = #{PRJCT_TYP_CD}
+		    </if>
+		    <choose>
+		    <when test="MBR_SQ != NULL and PRJCT_NM != NULL and PRJCT_ADDR != NULL">
+		    	AND (MBR_SQ LIKE CONCAT('%', #{MBR_SQ}, '%')
+		    		OR PRJCT_NM LIKE CONCAT('%', #{PRJCT_NM}, '%')
+		    		OR PRJCT_ADDR LIKE CONCAT('%', #{PRJCT_ADDR}, '%'))
+		    </when>
+		    <otherwise>
+		    <if test="MBR_SQ != NULL">
+		    	AND MBR_SQ LIKE CONCAT('%', #{MBR_SQ}, '%')
+		    </if>
+			<if test="PRJCT_NM != NULL">
+		    	AND PRJCT_NM LIKE CONCAT('%', #{PRJCT_NM}, '%') 
+		    </if>
+			<if test="PRJCT_ADDR != NULL">
+		    	AND PRJCT_ADDR LIKE CONCAT('%', #{PRJCT_ADDR}, '%') 
+		    </if>
+		    </otherwise>
+		    </choose>
+		</where>
+	</select>
+		
+	<insert id="insertProject" parameterType="com.project.vo.ProjectVo" useGeneratedKeys="true" keyProperty="prjctSq">
+		INSERT INTO EDU_JSP.TB_EST_PRJCT(
+			MBR_SQ,
+			PRJCT_SORT_ORDER,
+			PRJCT_NM,
+			PRJCT_TYP_CD,
+			PRJCT_ROLE_DTL,
+			PRJCT_START_DT,
+			PRJCT_END_DT,
+			PRJCT_ADDR,
+			PRJCT_CSTMR_CMPNY,
+			PRJCT_WRK_CMPNY
+			)
+		VALUES(
+			#{mbrSq},
+			#{prjctSortOrder},
+			#{prjctNm},
+			#{prjctTypCd},
+			#{prjctRoleDtl},
+			#{prjctStartDt},
+			#{prjctEndDt},
+			#{prjctAddr},
+			#{prjctCstmrCmpny},
+			#{prjctWrkCmpny}	
+			)
+	</insert>
+	
+	<update id="updateProject" parameterType="com.project.vo.ProjectVo" >
+		UPDATE EDU_JSP.TB_EST_PRJCT
+			SET
+				MBR_SQ = #{mbrSq},
+				PRJCT_SORT_ORDER = #{prjctSortOrder},
+				PRJCT_NM = #{prjctNm},
+				PRJCT_TYP_CD = #{prjctTypCd},
+				PRJCT_ROLE_DTL = #{prjctRoleDtl},
+				PRJCT_START_DT = #{prjctStartDt},
+				PRJCT_END_DT = #{prjctEndDt},
+				PRJCT_ADDR = #{prjctAddr},
+				PRJCT_CSTMR_CMPNY = #{prjctCstmrCmpny},
+				PRJCT_WRK_CMPNY = #{prjctWrkCmpny}
+			WHERE PRJCT_SQ = #{prjctSq}
+	</update>
+	
+	<delete id="deleteProject" parameterType="String" >
+		DELETE
+		FROM EDU_JSP.TB_EST_PRJCT
+		WHERE PRJCT_SQ=#{prjctSq}
+	</delete>
+	
+	<delete id="deleteProjectAll" parameterType="java.util.List" >
+		DELETE
+		FROM EDU_JSP.TB_EST_PRJCT
+		<where>
+		<foreach collection="list" item="item" open="" close="" separator="OR">
+			PRJCT_SQ=#{item.prjctSq}
+		</foreach>
+		</where>
+	</delete>
+	
+	<select id="selectprojectOne" parameterType="String" resultType="com.project.vo.ProjectVo">
+		<![CDATA[
+			SELECT 
+				  PRJCT_SQ
+				  ,MBR_SQ
+				  ,PRJCT_SORT_ORDER
+				  ,PRJCT_NM
+				  ,PRJCT_TYP_CD
+				  ,PRJCT_ROLE_DTL
+				  ,PRJCT_START_DT
+				  ,PRJCT_END_DT
+				  ,PRJCT_ADDR
+				  ,PRJCT_CSTMR_CMPNY
+				  ,PRJCT_WRK_CMPNY
+			FROM EDU_JSP.TB_EST_PRJCT
+			WHERE PRJCT_SQ = #{prjctSq}
+		]]>
+	</select>
+
+</mapper>

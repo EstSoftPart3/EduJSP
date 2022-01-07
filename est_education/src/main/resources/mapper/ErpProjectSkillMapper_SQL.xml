@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="erpProjectSkill">
+	
+<!-- <resultMap type="ProjectSkillVo" id="ProjectSkillVo">
+	<result column="prjctSq" property="prjctSq"/>
+	<result column="skillSq" property="skillSq"/>
+	<result column="skillTypNm" property="skillTypNm"/>
+	<result column="skillTypDtlNm" property="skillTypDtlNm"/>
+</resultMap> -->
+
+<!-- <resultMap type="SkillVo" id="SkillVo">
+	<result column="skillSq" property="skillSq"/>
+	<result column="skillTypCd" property="skillTypCd"/>
+	<result column="skillTypNm" property="skillTypNm"/>
+	<result column="skillTypDtlCd" property="skillTypDtlCd"/>
+	<result column="skillTypDtlNm" property="skillTypDtlNm"/>
+</resultMap> -->
+
+	<select id="selectProjectSkillList" parameterType="hashmap" resultType="com.erp.admin.business.projectskill.vo.ErpProjectSkillVo">
+		<![CDATA[
+			SELECT 
+				  EDU_JSP.TB_EEP_PRJCT_SKL.PRJCT_SQ
+				  ,EDU_JSP.TB_EEP_PRJCT_SKL.SKILL_SQ
+				  ,EDU_JSP.TB_EST_SKILL.SKILL_TYP_NM
+				  ,EDU_JSP.TB_EST_SKILL.SKILL_TYP_DTL_NM
+			FROM EDU_JSP.TB_EEP_PRJCT_SKL, EDU_JSP.TB_EST_SKILL
+		]]>
+		<where>
+		   EDU_JSP.TB_EEP_PRJCT_SKL.PRJCT_SQ = #{PRJCT_SQ}
+		   <if test="MBR_SQ != NULL">
+		    	AND EDU_JSP.TB_EST_SKILL.SKILL_TYP_NM = #{SKILL_TYP_NM}
+		    </if>
+		   AND EDU_JSP.TB_EEP_PRJCT_SKL.SKILL_SQ = EDU_JSP.TB_EST_SKILL.SKILL_SQ
+		</where>
+	</select>
+	
+	<insert id="insertProjectSkill" parameterType="java.util.List" >
+		INSERT INTO EDU_JSP.TB_EEP_PRJCT_SKL( 
+			PRJCT_SQ,
+			SKILL_SQ
+		) VALUES 
+		<foreach collection="list" item="item" separator=" , "> 
+		( 
+			${item.prjctSq} 
+			, ${item.SkillSq} 
+		) 
+		</foreach> 
+	</insert>
+
+	<update id="updateProjectSkill" parameterType="java.util.List" >
+		UPDATE EDU_JSP.TB_EEP_PRJCT_SKL
+			SET
+				SKILL_SQ = #{skillSq}
+			WHERE PRJCT_SQ = #{prjctSq} IN
+			<foreach collection="list" item="item" separator=" , "> 
+			 ${item.SkillSq} 
+			</foreach> 	
+	</update>
+	
+	<delete id="deleteProjectSkill" parameterType="com.erp.admin.business.projectskill.vo.ErpProjectSkillVo" >
+		DELETE
+			FROM EDU_JSP.TB_EEP_PRJCT_SKL
+			WHERE PRJCT_SQ = #{prjctSq}
+	</delete>
+	
+	<delete id="deleteProjectSkillAll" parameterType="java.util.List" >
+		DELETE
+		FROM EDU_JSP.TB_EEP_PRJCT_SKL
+		<where>
+		<foreach collection="list" item="item" open="" close="" separator="OR">
+			PRJCT_SQ=#{item.prjctSq}
+		</foreach>
+		</where>
+	</delete>
+
+</mapper>
