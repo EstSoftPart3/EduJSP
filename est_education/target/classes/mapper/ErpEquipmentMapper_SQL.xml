@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="erpEquipment">
+
+<!-- 장비 목록조회 
+<select id="selectEquipmentList" parameterType="hashmap" resultType="com.erp.admin.management.equipment.vo.ErpEquipmentVo">
+	<![CDATA[
+		SELECT 
+		   EQPMNT_SQ
+		 , EQPMNT_MNG_NUM
+		 , EQPMNT_TYP_CD
+		 , EQPMNT_STS_CD
+		 , EQPMNT_BRND
+		 , EQPMNT_MDL
+		 , EQPMNT_SRL
+		 , EQPMNT_INFO
+		 , EQPMNT_IS_USE
+		 , EQPMNT_RGSTR_DATE
+		 , EQPMNT_IMAGE
+		FROM EDU_JSP.TB_EEP_CMPNY_EQPMNT_M
+	]]>
+	<where>
+		<if test="EQPMNT_STS_CD != NULL and EQPMNT_STS_CD != 'all'">
+			EQPMNT_STS_CD = #{EQPMNT_STS_CD}
+		</if>
+		
+			
+		<if test="EQPMNT_TCD_ARRAY != NULL">
+			AND
+			
+			 <foreach collection="EQPMNT_TCD_ARRAY" item="item" open="(" close=")" separator="OR">
+				EQPMNT_TYP_CD = #{item}
+			</foreach> 
+		</if>
+		
+		
+		<choose>
+			<when test="EQPMNT_BRND != null and EQPMNT_SRL != null and EQPMNT_MDL != null">
+				AND (EQPMNT_BRND LIKE CONCAT('%', #{EQPMNT_BRND}, '%')
+					OR EQPMNT_SRL LIKE CONCAT('%', #{EQPMNT_SRL}, '%')
+					OR EQPMNT_MDL LIKE CONCAT('%', #{EQPMNT_MDL}, '%'))			
+			</when>	
+			<otherwise>
+				<if test="EQPMNT_BRND != NULL">
+					AND EQPMNT_BRND LIKE CONCAT('%', #{EQPMNT_BRND}, '%')
+				</if>
+				<if test="EQPMNT_SRL!= NULL">
+					AND EQPMNT_SRL LIKE CONCAT('%', #{EQPMNT_SRL}, '%')
+				</if>
+				<if test="EQPMNT_MDL != NULL">
+					AND EQPMNT_MDL LIKE CONCAT('%', #{EQPMNT_MDL}, '%')
+				</if>
+			</otherwise>
+		</choose>		
+	</where>	
+	<![CDATA[
+		ORDER BY EQPMNT_SQ ASC
+		LIMIT #{start}, #{end}
+	 ]]>
+</select>
+-->
+
+<!-- 샘플 게시글 전체 갯수 -->
+    <select id="selectEquipmentCount" resultType="int" parameterType="hashmap">
+        <![CDATA[
+	        SELECT 
+	        
+	        	COUNT(EQPMNT_SQ)
+	        FROM 
+	        	EDU_JSP.TB_EEP_CMPNY_EQPMNT_M
+	        	
+	        	WHERE 1=1
+	        	]]>
+				 <if test="EQPMNT_STS_CD != NULL and EQPMNT_STS_CD != 'all'">
+					AND EQPMNT_STS_CD = #{EQPMNT_STS_CD}
+				</if>
+				
+					
+				<if test="EQPMNT_TCD_ARRAY != NULL and EQPMNT_TCD_ARRAY != ''">
+					AND
+					 <foreach collection="EQPMNT_TCD_ARRAY" item="item" open="(" close=")" separator="OR">
+						EQPMNT_TYP_CD = #{item}
+					</foreach> 
+				</if>
+				
+				
+				<choose>
+					<when test="EQPMNT_BRND != null and EQPMNT_SRL != null and EQPMNT_MDL != null">
+						AND (EQPMNT_BRND LIKE CONCAT('%', #{EQPMNT_BRND}, '%')
+							OR EQPMNT_SRL LIKE CONCAT('%', #{EQPMNT_SRL}, '%')
+							OR EQPMNT_MDL LIKE CONCAT('%', #{EQPMNT_MDL}, '%'))			
+					</when>	
+					<otherwise>
+					<if test="EQPMNT_BRND != NULL">
+						AND EQPMNT_BRND LIKE CONCAT('%', #{EQPMNT_BRND}, '%')
+					</if>
+					<if test="EQPMNT_SRL!= NULL">
+						AND EQPMNT_SRL LIKE CONCAT('%', #{EQPMNT_SRL}, '%')
+					</if>
+					<if test="EQPMNT_MDL != NULL">
+						AND EQPMNT_MDL LIKE CONCAT('%', #{EQPMNT_MDL}, '%')
+					</if>
+					</otherwise>
+				</choose>
+				<![CDATA[
+	            AND EQPMNT_SQ > 0
+        		]]> 						
+    </select>
+
+<!-- 장비 페이징 목록조회 -->
+<select id="selectEquipmentPagingList" parameterType="hashmap" resultType="com.erp.admin.management.equipment.vo.ErpEquipmentVo">
+	<![CDATA[
+		SELECT 
+		   EQPMNT_SQ
+		 , EQPMNT_MNG_NUM
+		 , EQPMNT_TYP_CD
+		 , EQPMNT_STS_CD
+		 , EQPMNT_BRND
+		 , EQPMNT_MDL
+		 , EQPMNT_SRL
+		 , EQPMNT_INFO
+		 , EQPMNT_IS_USE
+		 , EQPMNT_RGSTR_DATE
+		FROM EDU_JSP.TB_EEP_CMPNY_EQPMNT_M
+	]]>
+	<where>
+		<if test="EQPMNT_STS_CD != NULL and EQPMNT_STS_CD != 'all'">
+			EQPMNT_STS_CD = #{EQPMNT_STS_CD}
+		</if>
+		
+		<if test="EQPMNT_TCD_ARRAY != NULL and EQPMNT_TCD_ARRAY != ''">
+			AND
+			
+			 <foreach collection="EQPMNT_TCD_ARRAY" item="item" open="(" close=")" separator="OR">
+				EQPMNT_TYP_CD = #{item}
+			</foreach> 
+		</if>
+		
+		<choose>
+			<when test="EQPMNT_BRND != NULL and EQPMNT_SRL != NULL and EQPMNT_MDL != NULL">
+				AND (EQPMNT_BRND LIKE CONCAT('%', #{EQPMNT_BRND}, '%')
+					OR EQPMNT_SRL LIKE CONCAT('%', #{EQPMNT_SRL}, '%')
+					OR EQPMNT_MDL LIKE CONCAT('%', #{EQPMNT_MDL}, '%'))			
+			</when>	
+			<otherwise>
+				<if test="EQPMNT_BRND != NULL">
+					AND EQPMNT_BRND LIKE CONCAT('%', #{EQPMNT_BRND}, '%')
+				</if>
+				<if test="EQPMNT_SRL!= NULL">
+					AND EQPMNT_SRL LIKE CONCAT('%', #{EQPMNT_SRL}, '%')
+				</if>
+				<if test="EQPMNT_MDL != NULL">
+					AND EQPMNT_MDL LIKE CONCAT('%', #{EQPMNT_MDL}, '%')
+				</if>
+			</otherwise>
+		</choose>
+	</where>	
+	<![CDATA[
+		ORDER BY EQPMNT_SQ DESC
+		LIMIT #{start}, #{end}
+	 ]]>
+</select>
+
+
+<!-- 신규 장비 목록 추가 -->
+<insert id="insertEquipment" parameterType="com.erp.admin.management.equipment.vo.ErpEquipmentVo" >	
+	<selectKey keyProperty="eqpmntSq" resultType="int" order="BEFORE">
+		SELECT IFNULL(MAX(EQPMNT_SQ) + 1 , 1) FROM EDU_JSP.TB_EEP_CMPNY_EQPMNT_M
+		<!-- <if test="MAX(EQPMNT_SQ) == NULL">
+			eqpmntSq = 1;
+		</if> -->
+	</selectKey>
+	<![CDATA[
+		INSERT INTO EDU_JSP.TB_EEP_CMPNY_EQPMNT_M(
+		   EQPMNT_SQ
+		 , EQPMNT_MNG_NUM
+		 , EQPMNT_TYP_CD
+		 , EQPMNT_STS_CD
+		 , EQPMNT_BRND
+		 , EQPMNT_MDL
+		 , EQPMNT_SRL
+		 , EQPMNT_INFO
+		 , EQPMNT_IS_USE
+		 , EQPMNT_RGSTR_DATE
+		) VALUES(
+			#{eqpmntSq}
+		  , #{eqpmntMngNum}
+		  , #{eqpmntTypCd}
+		  , #{eqpmntStsCd}
+		  , #{eqpmntBrnd}
+		  , #{eqpmntMdl}
+		  , #{eqpmntSrl}
+		  , #{eqpmntInfo}
+		  , #{eqpmntIsUse}
+		  , #{eqpmntRgstrDate}		  
+		)
+	]]>
+
+</insert>
+
+<!-- 장비 선택시  -->
+<select id="selectEquipmentOne" parameterType="String" resultType="com.erp.admin.management.equipment.vo.ErpEquipmentVo">
+	<![CDATA[
+		SELECT
+		   EQPMNT_SQ
+		 , EQPMNT_MNG_NUM
+		 , EQPMNT_TYP_CD
+		 , EQPMNT_STS_CD
+		 , EQPMNT_BRND
+		 , EQPMNT_MDL
+		 , EQPMNT_SRL
+		 , EQPMNT_INFO
+		 , EQPMNT_IS_USE
+		 , EQPMNT_RGSTR_DATE
+		FROM EDU_JSP.TB_EEP_CMPNY_EQPMNT_M
+		WHERE EQPMNT_SQ = #{eqpmntSq}
+	]]>
+</select>
+
+<!-- 장비 삭제시 -->
+<delete id="deleteEquipment" parameterType="String">
+	<![CDATA[
+		DELETE
+		FROM EDU_JSP.TB_EEP_CMPNY_EQPMNT_M
+		WHERE EQPMNT_SQ = #{eqpmntSq}
+	]]>	
+</delete>
+
+<!-- 장비 전부 삭제 -->
+<delete id="deleteEquipemntAll" parameterType="java.util.List">
+<![CDATA[
+	DELETE
+	FROM EDU_JSP.TB_EEP_CMPNY_EQPMNT_M
+	]]>
+	<where>
+		<foreach collection="list" item="item" open="" close="" separator="OR">
+			EQPMNT_SQ = #{item.eqpmntSq}
+		</foreach>
+	</where>
+</delete>
+
+<!-- 장비 정보 수정 -->
+<update id="updateEquipment" parameterType="com.erp.admin.management.equipment.vo.ErpEquipmentVo">
+	<![CDATA[
+	UPDATE EDU_JSP.TB_EEP_CMPNY_EQPMNT_M
+		SET
+			EQPMNT_MNG_NUM 		= #{eqpmntMngNum},
+			EQPMNT_TYP_CD 		= #{eqpmntTypCd},
+			EQPMNT_STS_CD		= #{eqpmntStsCd},
+			EQPMNT_BRND 		= #{eqpmntBrnd},
+			EQPMNT_MDL			= #{eqpmntMdl},
+			EQPMNT_SRL 			= #{eqpmntSrl},
+			EQPMNT_INFO 		= #{eqpmntInfo},
+			EQPMNT_IS_USE 		= #{eqpmntIsUse},
+			EQPMNT_RGSTR_DATE	= #{eqpmntRgstrDate},
+		WHERE EQPMNT_SQ 		= #{eqpmntSq}
+	]]>
+</update>
+
+<!-- 렌탈 정보 불러오기 -->
+<select id="selectEquipmentLentalOne" parameterType="hashmap" resultType="com.erp.admin.management.equipment.vo.ErpEquipmentVo">
+        <![CDATA[
+					SELECT
+									  T1.EQPMNT_SQ
+									, T1.EQPMNT_TYP_CD 
+									, T2.LNTL_SQ
+									, T2.LNTL_STRT_DATE
+									, T2.LNTL_RTRN_DATE
+									, T2.LNTL_MEMO
+									, T3.MBR_SQ
+									, T3.MBR_NM									
+								   
+					    FROM  EDU_JSP.TB_EEP_CMPNY_EQPMNT_M  T1 
+					    		INNER JOIN EDU_JSP.TB_EST_EQPMNT_LNTL  T2
+					       		ON T2.EQPMNT_SQ = T1.EQPMNT_SQ
+					      		 INNER JOIN EDU_JSP.TB_EST_MBR T3
+					       			ON T3.MBR_SQ = T2.MBR_SQ
+					    WHERE     T1.EQPMNT_SQ =  #{EQPMNT_SQ}
+	]]>
+    </select>
+
+
+</mapper>	

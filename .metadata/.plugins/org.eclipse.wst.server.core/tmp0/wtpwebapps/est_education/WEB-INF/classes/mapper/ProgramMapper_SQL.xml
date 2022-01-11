@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="program">
+
+	<!-- 프로그램  Mapper -->
+	<!-- 프로그램 리스트 뽑기 위한 resultMap으로 셋팅 -->
+	<resultMap id="programVo" type="com.program.vo.ProgramVo">
+   		<result property="programGrpNm" column="PROGRAM_GROUP_NM"/>
+   		<result property="programGrpCd" column="PROGRAM_GROUP_CD"/>
+   		<result property="programCd" column="PROGRAM_CD" />
+   		<result property="programNm" column="PROGRAM_NM" />
+   		<result property="srcPath" column="SRC_PATH" />
+   		<result property="isUse" column="IS_USE" />
+   		<result property="note" column="NOTE" />
+ 	</resultMap>
+
+	<!-- 프로그램 리스트 출력 및 검색,조회 SQL -->
+	<select id="selectProgramList" resultMap="programVo" parameterType="hashmap">
+		SELECT P.PROGRAM_CD, 
+			   P.PROGRAM_NM, 
+			   P.PROGRAM_GROUP_CD, 
+			   (SELECT C.CODE_NM FROM TB_EST_WRM_CODE C WHERE C.COM_CD = P.PROGRAM_GROUP_CD AND C.GRP_CD = '00026') AS PROGRAM_GROUP_NM,
+			   P.SRC_PATH, 
+			   P.IS_USE, 
+			   P.NOTE
+		FROM TB_EST_PRO P
+		<where>
+			<if test="keyWord != '' and keyWord != NULL">
+		    	AND C.CODE_NM LIKE CONCAT('%', #{keyWord}, '%') OR PROGRAM_NM LIKE CONCAT('%', #{keyWord}, '%')
+		    </if>
+			<if test="isUse != 'ALL' and isUse != NULL">
+				AND P.IS_USE = #{isUse}
+			</if>
+		</where>
+		ORDER BY P.PROGRAM_CD
+	</select>
+
+	<!-- 프로그램 등록 SQL -->
+	<insert id="insertProgram" parameterType="com.program.vo.ProgramVo">
+		INSERT INTO TB_EST_PRO
+		(
+			PROGRAM_CD, 
+			PROGRAM_NM, 
+			PROGRAM_GROUP_CD, 
+			SRC_PATH, 
+			IS_USE, 
+			NOTE
+		) 
+		VALUES 
+		(
+			#{programCd}, 
+			#{programNm}, 
+			#{programGrpCd}, 
+			#{srcPath}, 
+			#{isUse}, 
+			#{note}
+		)
+	</insert>
+	
+	<!-- 프로그램 수정 SQL -->
+	<update id="updateProgram" parameterType="com.program.vo.ProgramVo">
+		UPDATE TB_EST_PRO SET 
+			PROGRAM_NM = #{programNm}, 
+		   	PROGRAM_GROUP_CD = #{programGrpCd}, 
+		   	SRC_PATH = #{srcPath}, 
+		   	IS_USE = #{isUse}, 
+		   	NOTE = #{note} 
+		WHERE PROGRAM_CD = #{programCd}
+	</update>
+
+	<!-- 프로그램 삭제 SQL -->
+	<delete id="deleteProgram" parameterType="com.program.vo.ProgramVo">
+		DELETE FROM TB_EST_PRO WHERE PROGRAM_CD = #{programCd}
+	</delete>
+	
+	<!-- 프로그램 팝업 창화면 프로그램 그룹 값가지고 오기 -->
+	<select id="selectProgramPop" resultType="com.program.vo.ProgramPopVo" parameterType="hashmap">
+		SELECT 
+		GRP_CD,
+		CODE_CD,
+		CODE_NM
+		FROM TB_EST_WRM_CODE 
+		WHERE GRP_CD = '00026'
+	</select>
+	
+	<!-- 프로그램 접근 권한 Mapper -->
+	<!-- 프로그램 접근 권한 리스트 뽑기 위한 resultMap으로 셋팅 -->
+	<resultMap id="programAuthVo" type="com.program.vo.ProgramAuthVo">
+   		<result property="programCd" column="PROGRAM_CD"/>
+   		<result property="programAuthCd" column="AUTHORITY_CD"/>
+   		<result property="programAuthNm" column="AUTHORITY_NM" />
+   		<result property="isAuthSelect" column="IS_AUTH_SELECT" />
+   		<result property="isAuthSave" column="IS_AUTH_SAVE" />
+   		<result property="isAuthExcel" column="IS_AUTH_EXCEL" />
+ 	</resultMap>
+	
+	<!-- 프로그램 접근 권한 리스트 출력 SQL -->
+	<select id="selectProgramAuth" resultMap="programAuthVo" parameterType="hashmap">
+		SELECT 
+			P.PROGRAM_CD, 
+			P.AUTHORITY_CD, 
+			A.AUTHORITY_NM, 
+			P.IS_AUTH_SELECT, 
+			P.IS_AUTH_SAVE, 
+			P.IS_AUTH_EXCEL
+		FROM TB_EST_PRO_AUTH P, TB_EST_WRM_AUTHORITY A 
+		WHERE 
+			P.AUTHORITY_CD = A.AUTHORITY_CD AND 
+			P.PROGRAM_CD = #{programCd} AND 
+			A.IS_USE = 'Y'
+		ORDER BY AUTHORITY_CD
+	</select>
+	
+	<!-- 프로그램 접근 권한 등록 SQL -->
+	<insert id="insertProgramAuth" parameterType="com.program.vo.ProgramAuthVo">
+		INSERT INTO TB_EST_PRO_AUTH (
+			AUTHORITY_CD, 
+			PROGRAM_CD, 
+			IS_AUTH_SELECT, 
+			IS_AUTH_SAVE, 
+			IS_AUTH_EXCEL
+		)
+		VALUES (
+			#{programAuthCd}, 
+			#{programCd}, 
+			#{isAuthSelect}, 
+			#{isAuthSave}, 
+			#{isAuthExcel}
+		)
+	</insert>
+	
+	<!-- 프로그램 접근 권한 수정 SQL -->
+	<update id="updateProgramAuth" parameterType="com.program.vo.ProgramAuthVo">
+		UPDATE TB_EST_PRO_AUTH
+		   SET IS_AUTH_SELECT = #{isAuthSelect}
+			 , IS_AUTH_SAVE = #{isAuthSave}
+			 , IS_AUTH_EXCEL = #{isAuthExcel}
+		 WHERE PROGRAM_CD = #{programCd}
+		   AND AUTHORITY_CD = #{programAuthCd}
+	</update>
+
+	<!-- 프로그램 접근 권한 삭제 SQL -->
+	<delete id="deleteProgramAuth" parameterType="com.program.vo.ProgramAuthVo">
+		DELETE FROM TB_EST_PRO_AUTH 
+		WHERE PROGRAM_CD = #{programCd} 
+		AND AUTHORITY_CD = #{programAuthCd}
+	</delete>
+	
+</mapper>

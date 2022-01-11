@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="humanresources">
+
+<select id="selectHumanresourcesList" parameterType="hashmap" resultType="com.humanresources.vo.HumanresourcesVo">
+
+	SELECT  HMN_RSRCS_STTSTCS_DT
+			, HMN_RSRCS_STTSTCS_SRI_NT_AC
+			, HMN_RSRCS_STTSTCS_SRI_NT_ITV
+			, HMN_RSRCS_STTSTCS_JK_NT_AC
+			, HMN_RSRCS_STTSTCS_JK_NT_ITV
+			, HMN_RSRCS_STTSTCS_SRI_SRC_RS
+			, HMN_RSRCS_STTSTCS_SRI_SRC_SG
+			, HMN_RSRCS_STTSTCS_SRI_SRC_AP
+			, HMN_RSRCS_STTSTCS_SRI_SRC_AT
+			, HMN_RSRCS_STTSTCS_SRI_SRC_AS
+			, HMN_RSRCS_STTSTCS_SRI_SRC_CC
+			, HMN_RSRCS_STTSTCS_JK_SRC_RS
+			, HMN_RSRCS_STTSTCS_JK_SRC_SG
+			, HMN_RSRCS_STTSTCS_JK_SRC_AP
+			, HMN_RSRCS_STTSTCS_JK_SRC_AT
+			, HMN_RSRCS_STTSTCS_JK_SRC_AS
+			, HMN_RSRCS_STTSTCS_JK_SRC_CC
+			, HMN_RSRCS_STTSTCS_NT
+	FROM TB_EST_HMN_RSRCS_STTSTCS
+	ORDER BY HMN_RSRCS_STTSTCS_DT DESC
+	
+</select>
+
+ <insert id="insertHumanresourcesList" parameterType="com.humanresources.vo.HumanresourcesVo">
+		INSERT INTO TB_EST_HMN_RSRCS_STTSTCS (
+			  HMN_RSRCS_STTSTCS_DT
+			, HMN_RSRCS_STTSTCS_SRI_NT_AC
+			, HMN_RSRCS_STTSTCS_SRI_NT_ITV
+			, HMN_RSRCS_STTSTCS_JK_NT_AC
+			, HMN_RSRCS_STTSTCS_JK_NT_ITV
+			, HMN_RSRCS_STTSTCS_SRI_SRC_RS
+			, HMN_RSRCS_STTSTCS_SRI_SRC_SG
+			, HMN_RSRCS_STTSTCS_SRI_SRC_AP
+			, HMN_RSRCS_STTSTCS_SRI_SRC_AT
+			, HMN_RSRCS_STTSTCS_SRI_SRC_AS
+			, HMN_RSRCS_STTSTCS_SRI_SRC_CC
+			, HMN_RSRCS_STTSTCS_JK_SRC_RS
+			, HMN_RSRCS_STTSTCS_JK_SRC_SG
+			, HMN_RSRCS_STTSTCS_JK_SRC_AP
+			, HMN_RSRCS_STTSTCS_JK_SRC_AT
+			, HMN_RSRCS_STTSTCS_JK_SRC_AS
+			, HMN_RSRCS_STTSTCS_JK_SRC_CC
+			, HMN_RSRCS_STTSTCS_NT
+			
+		) VALUES (
+			  #{hmnRsrcsSttstcsDt}
+			, #{hmnRsrcsSttstcsSriNtAc}
+			, #{hmnRsrcsSttstcsSriNtItv}
+			, #{hmnRsrcsSttstcsJkNtAc}
+			, #{hmnRsrcsSttstcsJkNtItv}
+			, #{hmnRsrcsSttstcsSriSrcRs}
+			, #{hmnRsrcsSttstcsSriSrcSg}
+			, #{hmnRsrcsSttstcsSriSrcAp}
+			, #{hmnRsrcsSttstcsSriSrcAt}
+			, #{hmnRsrcsSttstcsSriSrcAs}
+			, #{hmnRsrcsSttstcsSriSrcCc}
+			, #{hmnRsrcsSttstcsJkSrcRs}
+			, #{hmnRsrcsSttstcsJkSrcSg}
+			, #{hmnRsrcsSttstcsJkSrcAp}
+			, #{hmnRsrcsSttstcsJkSrcAt}
+			, #{hmnRsrcsSttstcsJkSrcAs}
+			, #{hmnRsrcsSttstcsJkSrcCc}
+			, #{hmnRsrcsSttstcsNt}
+			
+		)
+	</insert> 
+	
+	<update id="updateHumanresourcesList" parameterType="com.humanresources.vo.HumanresourcesVo">
+		
+			UPDATE TB_EST_HMN_RSRCS_STTSTCS 
+			SET
+			  HMN_RSRCS_STTSTCS_DT         		   = #{hmnRsrcsSttstcsDt}
+			, HMN_RSRCS_STTSTCS_SRI_NT_AC     	   = #{hmnRsrcsSttstcsSriNtAc}
+			, HMN_RSRCS_STTSTCS_SRI_NT_ITV         = #{hmnRsrcsSttstcsSriNtItv}
+			, HMN_RSRCS_STTSTCS_JK_NT_AC           = #{hmnRsrcsSttstcsJkNtAc}
+			, HMN_RSRCS_STTSTCS_JK_NT_ITV     	   = #{hmnRsrcsSttstcsJkNtItv}
+			, HMN_RSRCS_STTSTCS_SRI_SRC_RS         = #{hmnRsrcsSttstcsSriSrcRs}
+			, HMN_RSRCS_STTSTCS_SRI_SRC_SG         = #{hmnRsrcsSttstcsSriSrcSg}
+			, HMN_RSRCS_STTSTCS_SRI_SRC_AP     	   = #{hmnRsrcsSttstcsSriSrcAp}
+			, HMN_RSRCS_STTSTCS_SRI_SRC_AT         = #{hmnRsrcsSttstcsSriSrcAt}
+			, HMN_RSRCS_STTSTCS_SRI_SRC_AS         = #{hmnRsrcsSttstcsSriSrcAs}
+			, HMN_RSRCS_STTSTCS_SRI_SRC_CC     	   = #{hmnRsrcsSttstcsSriSrcCc}
+			, HMN_RSRCS_STTSTCS_JK_SRC_RS          = #{hmnRsrcsSttstcsJkSrcRs}
+			, HMN_RSRCS_STTSTCS_JK_SRC_SG          = #{hmnRsrcsSttstcsJkSrcSg}
+			, HMN_RSRCS_STTSTCS_JK_SRC_AP     	   = #{hmnRsrcsSttstcsJkSrcAp}
+			, HMN_RSRCS_STTSTCS_JK_SRC_AT          = #{hmnRsrcsSttstcsJkSrcAt}
+			, HMN_RSRCS_STTSTCS_JK_SRC_AS          = #{hmnRsrcsSttstcsJkSrcAs}
+			, HMN_RSRCS_STTSTCS_JK_SRC_CC          = #{hmnRsrcsSttstcsJkSrcCc}
+			, HMN_RSRCS_STTSTCS_NT     	  		   = #{hmnRsrcsSttstcsNt}
+			WHERE HMN_RSRCS_STTSTCS_DT = #{hmnRsrcsSttstcsDt}
+	</update>
+	
+	<select id="searchHumanresourcesList" parameterType="hashmap" resultType="com.humanresources.vo.HumanresourcesVo">
+
+	SELECT   HMN_RSRCS_STTSTCS_DT
+			, HMN_RSRCS_STTSTCS_SRI_NT_AC
+			, HMN_RSRCS_STTSTCS_SRI_NT_ITV
+			, HMN_RSRCS_STTSTCS_JK_NT_AC
+			, HMN_RSRCS_STTSTCS_JK_NT_ITV
+			, HMN_RSRCS_STTSTCS_SRI_SRC_RS
+			, HMN_RSRCS_STTSTCS_SRI_SRC_SG
+			, HMN_RSRCS_STTSTCS_SRI_SRC_AP
+			, HMN_RSRCS_STTSTCS_SRI_SRC_AT
+			, HMN_RSRCS_STTSTCS_SRI_SRC_AS
+			, HMN_RSRCS_STTSTCS_SRI_SRC_CC
+			, HMN_RSRCS_STTSTCS_JK_SRC_RS
+			, HMN_RSRCS_STTSTCS_JK_SRC_SG
+			, HMN_RSRCS_STTSTCS_JK_SRC_AP
+			, HMN_RSRCS_STTSTCS_JK_SRC_AT
+			, HMN_RSRCS_STTSTCS_JK_SRC_AS
+			, HMN_RSRCS_STTSTCS_JK_SRC_CC
+			, HMN_RSRCS_STTSTCS_NT
+	FROM TB_EST_HMN_RSRCS_STTSTCS
+	ORDER BY HMN_RSRCS_STTSTCS_DT DESC
+	
+</select>
+
+ <select id="popupHumanresourcesList" parameterType="hashmap" resultType="com.humanresources.vo.HumanresourcesVo">
+	<![CDATA[
+		SELECT 			IFNULL(SUM( HMN_RSRCS_STTSTCS_SRI_NT_AC),0)  AS HMN_RSRCS_STTSTCS_SRI_NT_AC, 	
+						IFNULL(SUM( HMN_RSRCS_STTSTCS_SRI_NT_ITV),0) AS hmnRsrcsSttstcsSriNtItv, 
+						IFNULL(SUM( HMN_RSRCS_STTSTCS_JK_NT_AC),0)   AS hmnRsrcsSttstcsJkNtAc, 
+						IFNULL(SUM( HMN_RSRCS_STTSTCS_JK_NT_ITV),0)  AS hmnRsrcsSttstcsJkNtItv, 
+						IFNULL(SUM( HMN_RSRCS_STTSTCS_SRI_SRC_RS),0) AS hmnRsrcsSttstcsSriSrcRs, 
+						IFNULL(SUM( HMN_RSRCS_STTSTCS_SRI_SRC_SG),0) AS hmnRsrcsSttstcsSriSrcSg, 
+						IFNULL(SUM( HMN_RSRCS_STTSTCS_SRI_SRC_AP),0) AS hmnRsrcsSttstcsSriSrcAp, 
+						IFNULL(SUM( HMN_RSRCS_STTSTCS_SRI_SRC_AT),0) AS hmnRsrcsSttstcsSriSrcAt, 
+						IFNULL(SUM( HMN_RSRCS_STTSTCS_SRI_SRC_AS),0) AS hmnRsrcsSttstcsSriSrcAs, 
+						IFNULL(SUM( HMN_RSRCS_STTSTCS_SRI_SRC_CC),0) AS hmnRsrcsSttstcsSriSrcCc, 
+						IFNULL(SUM( HMN_RSRCS_STTSTCS_JK_SRC_RS),0)  AS hmnRsrcsSttstcsJkSrcRs, 
+						IFNULL(SUM( HMN_RSRCS_STTSTCS_JK_SRC_SG),0)  AS hmnRsrcsSttstcsJkSrcSg, 
+						IFNULL(SUM( HMN_RSRCS_STTSTCS_JK_SRC_AP),0)  AS hmnRsrcsSttstcsJkSrcAp, 
+						IFNULL(SUM( HMN_RSRCS_STTSTCS_JK_SRC_AT),0)  AS hmnRsrcsSttstcsJkSrcAt,
+						IFNULL(SUM( HMN_RSRCS_STTSTCS_JK_SRC_AS),0)  AS hmnRsrcsSttstcsJkSrcAs, 
+						IFNULL(SUM( HMN_RSRCS_STTSTCS_JK_SRC_CC),0)  AS hmnRsrcsSttstcsJkSrcCc		
+		FROM TB_EST_HMN_RSRCS_STTSTCS
+		WHERE HMN_RSRCS_STTSTCS_DT >= #{startDt} AND HMN_RSRCS_STTSTCS_DT <= #{endDt}
+	]]>
+</select>
+
+</mapper>

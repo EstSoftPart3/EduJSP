@@ -1,0 +1,180 @@
+<%@ page pageEncoding="utf-8"%>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="cache-control" content="no-cache" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densitydpi=medium-dpi" />
+<meta name="Generator" content="">
+<meta name="Author" content="">
+<meta name="Keywords" content="">
+<meta name="Description" content="">
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>  
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<!-- css -->
+	<link rel="stylesheet" type="text/css" href="<c:url value='https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.css'/>"/>
+
+	<!-- favicon --> 
+	<link rel="shortcut icon" href="/dist/img/favicon.ico" type="image/x-icon">
+	<!-- Ionicons -->
+	<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+	<!-- Tempusdominus Bbootstrap 4 -->
+	<link rel="stylesheet" href="/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+	<!-- iCheck -->
+	<link rel="stylesheet" href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+	<!-- JQVMap -->
+	<link rel="stylesheet" href="/plugins/jqvmap/jqvmap.min.css">
+	<!-- Theme style -->
+	<link rel="stylesheet" href="/dist/css/adminlte.min.css">
+	<!-- overlayScrollbars -->
+	<link rel="stylesheet" href="/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+	<!-- Daterange picker -->
+	<link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
+	<!-- summernote -->
+	<link rel="stylesheet" href="/plugins/summernote/summernote-bs4.css">
+
+<!-- js.jquery(필요 시 수정) -->
+<%-- 	<script type="text/javascript" src="<c:url value='/js/jquery/jquery.js'/>"></script> --%>
+<%-- 	<script type="text/javascript" src="<c:url value='/js/jquery/jquery.min.js'/>"></script> --%>
+<%-- 	<script type="text/javascript" src="<c:url value='/js/jquery/jquery.form.js'/>" charset="utf-8"></script> --%>
+<%-- 	<script type="text/javascript" src="<c:url value='/js/jquery/jquery.cookie.js'/>"></script> --%>
+<%-- 	<script type="text/javascript" src="<c:url value='/js/jquery/jquery.cube.threejs.js'/>" charset="utf-8"></script> --%>
+<%-- 	<script type="text/javascript" src="<c:url value='/js/jquery/jquery.validate.js'/>"></script> --%>
+<%-- 	<script type="text/javascript" src="<c:url value='/js/jquery/jquery.validate.min.js'/>"></script> --%>
+<%-- 	<script type="text/javascript" src="<c:url value='/js/jquery/jQueryRotate.js'/>"></script> --%>
+<%-- 	<script type="text/javascript" src="<c:url value='/js/jquery/jquery-ui-1.12.1/jquery-ui.js'/>"></script> --%>
+	
+	<!-- jQuery -->
+	<script src="/plugins/jquery/jquery.min.js"></script>
+	<!-- jQuery -->
+	<script src="/plugins/jquery/jquery.min.js"></script>
+	<!-- jQuery UI 1.11.4 -->
+	<script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
+	<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+	<script>
+	  $.widget.bridge('uibutton', $.ui.button)
+	</script>
+	<!-- Bootstrap 4 -->
+	<script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- ChartJS -->
+	<script src="/plugins/chart.js/Chart.min.js"></script>
+	<!-- Sparkline -->
+	<script src="/plugins/sparklines/sparkline.js"></script>
+	<!-- JQVMap -->
+	<script src="/plugins/jqvmap/jquery.vmap.min.js"></script>
+	<script src="/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+	<!-- jQuery Knob Chart -->
+	<script src="/plugins/jquery-knob/jquery.knob.min.js"></script>
+	<!-- daterangepicker -->
+	<script src="/plugins/moment/moment.min.js"></script>
+	<script src="/plugins/daterangepicker/daterangepicker.js"></script>
+	<!-- Tempusdominus Bootstrap 4 -->
+	<script src="/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+	<!-- Summernote -->
+	<script src="/plugins/summernote/summernote-bs4.min.js"></script>
+	<!-- overlayScrollbars -->
+	<script src="/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="/dist/js/adminlte.js"></script>
+	<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+	<script src="/dist/js/pages/dashboard.js"></script>
+	<!-- AdminLTE for demo purposes -->
+	<script src="/dist/js/demo.js"></script>
+		
+	
+<!-- js.basic -->
+	<script type="text/javascript" src="<c:url value='/js/basic/common.js'/>" charset="utf-8"></script>
+
+<!-- API -->
+	<!-- Google Font: Source Sans Pro -->
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+	<style>
+		 .sidebar {
+		   		width: 250px;
+		   	height: 140px;
+		   	overflow: auto;
+		 }
+		 .sidebar::-webkit-scrollbar {
+		   	width: 10px;
+		 }
+		 .sidebar::-webkit-scrollbar-thumb {
+		   	height: 17%;
+		   	background-color: rgba(255,255,255,1);
+		   /* 스크롤바 둥글게 설정    */
+		   	border-radius: 10px;;
+		 }
+		 .sidebar::-webkit-scrollbar-track {
+		   	background-color: rgba(0,0,0,0);
+		 }
+		 .AllScrollbar::-webkit-scrollbar {
+		  	width: 6px;
+		 }
+		 .AllScrollbar::-webkit-scrollbar-track {
+		  	background-color: transparent;
+		 }
+		 .AllScrollbar::-webkit-scrollbar-thumb {
+		  	border-radius: 3px;
+		  	background-color: gray;
+		 }
+		 .AllScrollbar::-webkit-scrollbar-button {
+		  	width: 0;
+		  	height: 0;
+		 }
+	</style>
+	
+	<script>
+	
+	
+		$(document).ready(function(){
+			
+			//사이드바 안에 소메뉴 숫자 카운트 및 표시
+	        var beforeSystem      = $('#beforeSystem li').length;
+	        var beforeWork        = $('#beforeWork li').length;
+	        var beforeDevelopment = $('#beforeDevelopment li').length;
+	        var laterSystem       = $('#laterSystem li').length;
+	        var laterManagement   = $('#laterManagement li').length;
+	        var laterBusiness     = $('#laterBusiness li').length;
+	        var laterEducation    = $('#laterEducation li').length;
+	        var laterHrManagement = $('#laterHrManagement li').length;
+	        var laterSales        = $('#laterSales li').length;
+	        var laterDevelopment  = $('#laterDevelopment li').length;
+	        var laterStatistics   = $('#laterStatistics li').length;
+	        
+	        $("#beforeSystemCount").html(beforeSystem);
+	        $("#beforeWorkCount").html(beforeWork);
+	        $("#beforeDevelopmentCount").html(beforeDevelopment);
+	        $("#laterSystemCount").html(laterSystem);
+	        $("#laterManagementCount").html(laterManagement);
+	        $("#laterBusinessCount").html(laterBusiness);
+	        $("#laterEducationCount").html(laterEducation);
+	        $("#laterHrManagementCount").html(laterHrManagement);
+	        $("#laterSalesCount").html(laterSales);
+	        $("#laterDevelopmentCount").html(laterDevelopment);
+	        $("#laterStatisticsCount").html(laterStatistics);
+	        
+	    });
+	
+		//세션 체크 구 함수
+		var time = 1800;
+		var min = "";
+		var sec = "";
+		
+		var x = setInterval(function(){
+		 	min = parseInt(time/60);
+		 	sec = time % 60;
+		 	document.getElementById("sessionTime").innerHTML = min + "분" + sec + "초";
+		 	time--;
+		 
+		 if(time < 0) {
+		  	clearInterval(x);
+		  	document.getElementById("sessionTime").innerHTML = "시간초과";
+		  	alert("일정시간동안 동작이 없어 로그아웃되었습니다.");
+		 }
+		}, 1000);
+
+	</script>
+	<title>(주)이에스티소프트 ERP</title>

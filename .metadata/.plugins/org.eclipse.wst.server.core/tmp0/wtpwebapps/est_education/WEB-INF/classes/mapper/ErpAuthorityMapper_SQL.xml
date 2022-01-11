@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="erpAuthority">
+
+	<select id="selectAuthorityList" parameterType="hashmap"
+		resultType="com.erp.admin.system.authority.vo.ErpAuthorityVo">
+		SELECT AUTH_CD AS authCd
+			  ,AUTH_NM AS authNm
+			  ,AUTH_ENRLM_DT AS authEmrlmDt
+			  ,AUTH_USE_WHTHR AS authUseWhthr
+			  ,AUTH_NOTE AS authNote
+		FROM
+		EDU_JSP.TB_EEP_COMM_AUTH_M
+		<where>
+			<if test='cmpnySq != NULL and cmpnySq!="전체"'>
+				AND CMPNY_SQ=#{cmpnySq}
+		
+			</if>
+			<if test='useYna != "A" and useYna != NULL'>
+				AND AUTH_USE_WHTHR = #{useYna}
+			</if>
+			<if test='searchCond=="Cd"'>
+				<if test='keyWord != "" and keyWord != NULL'>
+					AND AUTH_CD LIKE CONCAT('%', #{keyWord}, '%')
+				</if>
+			</if>
+			<if test='searchCond=="Nm"'>
+				<if test='keyWord != "" and keyWord != NULL'>
+
+					AND AUTH_NM LIKE CONCAT('%', #{keyWord}, '%')
+				</if>
+			</if>
+
+
+		</where>
+	</select>
+	<insert id="insertAuthorityOne" parameterType="hashmap">
+		INSERT INTO EDU_JSP.TB_EEP_COMM_AUTH_M
+				(AUTH_CD
+				,AUTH_NM
+				,AUTH_USE_WHTHR
+				,AUTH_NOTE
+			    ,AUTH_ENRLM_DT
+			    ,CMPNY_SQ
+			    )
+	    VALUES(
+			   #{authCd}
+			  ,#{authNm}
+			  ,#{authUseWhthr}
+			  ,#{authNote}
+			  ,now()
+			  ,#{cmpnySq}
+			  )
+	</insert>
+
+
+	<update id="updateAuthorityOne" parameterType="hashmap">
+		UPDATE EDU_JSP.TB_EEP_COMM_AUTH_M
+		SET  
+			 AUTH_NM 	    	=	 #{authNm}
+	   		,AUTH_USE_WHTHR     =	 #{authUseWhthr}
+	   		,AUTH_NOTE	        =    #{authNote}
+	   		,AUTH_CRRCTN_DT     =    now()
+	   		<!-- ,AUTH_CRRCTN_USR_SQ =     -->
+		WHERE 
+			 AUTH_CD			=    #{authCd}
+
+	</update>	
+
+	<delete id="deleteAuthorityOne" parameterType="hashmap">
+		DELETE FROM EDU_JSP.TB_EEP_COMM_AUTH_M
+		WHERE  AUTH_NM 			=    #{authNm}
+
+
+	</delete>
+	<!-- 권한별 직원관련  컬럼 join으로 출력-->
+	<select id="selectAuthAllEmply" parameterType="hashmap" resultType="com.erp.admin.system.authority.vo.ErpAuthorityMemberVo">
+SELECT A.authCd authCd,A.authNote authNote,C.usrId usrId,C.usrSq usrSq,D.emplySq emplySq,D.emplyNm emplyNm,D.deptTcd deptTcd,D.rnkTcd rnkTcd FROM
+((((SELECT 
+		AUTH_CD as authCd,
+        AUTH_NOTE as authNote
+ FROM 
+		TB_EEP_COMM_AUTH_M
+ WHERE 
+ 		 AUTH_CD=#{authCd}) A LEFT OUTER JOIN 
+							(SELECT
+								 AUTH_CD as authCd,
+								 EMPLY_SQ as emplySq
+								 
+		 					 FROM 
+		 					     TB_EEP_COMM_AUTH_EMPLY_R) B 
+		 					     						  ON A.authCd =
+		 					     						     B.authCd) INNER JOIN
+		 					     						     			  (SELECT USR_ID as usrId,
+		 					     						     			  		  USR_SQ as usrSq,
+		 					     						     			  		  EMPLY_SQ as emplySq
+																		   FROM
+									                                          TB_EEP_PLTFRM_USR_M) C
+									                                                             ON B.emplySq =
+									                                                                C.emplySq) 
+									                                                                INNER JOIN
+									                                                                 (SELECT 
+									                                                                 	EMPLY_NM as emplyNm,
+		 						  													                    DEPT_TCD as deptTcd,
+		 						  													                    RNK_TCD as rnkTcd,
+		 						  													                    EMPLY_SQ as emplySq
+		 						  													                  FROM
+		 						  													                    TB_EEP_EMPLY_M) D ON C.emplySq=D.emplySq)
+	<where>
+				<if test='searchCond=="emplyNm"'>
+				<if test='keyWord != "" and keyWord != NULL'>
+					AND emplyNm LIKE CONCAT('%', #{keyWord}, '%')
+				</if>
+			</if>
+			<if test='searchCond=="usrId"'>
+				<if test='keyWord != "" and keyWord != NULL'>
+
+					AND usrId LIKE CONCAT('%', #{keyWord}, '%')
+				</if>
+			</if>
+	</where>
+	</select>
+	<insert id="insertAuthorityMemberOne" parameterType="hashmap">
+
+	INSERT INTO EDU_JSP.TB_EEP_COMM_AUTH_EMPLY_R
+	VALUES(#{authCd},
+		   #{cmpnySq},
+		   #{emplySq},
+		   #{usrSq},
+		   #{usrId})
+</insert>
+<select id="selectUsrId" parameterType="hashmap" resultType="com.erp.admin.system.authority.vo.ErpAuthorityMemberVo">
+	SELECT USR_SQ as usrSq,CMPNY_SQ as cmpnySq
+	FROM EDU_JSP.TB_EEP_PLTFRM_USR_M
+	WHERE USR_ID = #{usrId}
+</select>
+<select id="selectNewUsrSq" parameterType="hashmap" resultType="com.erp.admin.system.authority.vo.ErpAuthorityMemberVo">
+	SELECT USR_SQ as newUsrSq,CMPNY_SQ as cmpnySq
+	FROM EDU_JSP.TB_EEP_PLTFRM_USR_M
+	WHERE USR_ID = #{usrId}
+</select>
+<select id="selectEmplySq" parameterType="hashmap" resultType="com.erp.admin.system.authority.vo.ErpAuthorityMemberVo">
+	SELECT EMPLY_SQ as emplySq 
+	FROM EDU_JSP.TB_EEP_PLTFRM_USR_M
+	WHERE USR_ID =	#{usrId}
+</select>
+<select id="selectNewEmplySq" parameterType="hashmap" resultType="com.erp.admin.system.authority.vo.ErpAuthorityMemberVo">
+	SELECT EMPLY_SQ as emplySq 
+	FROM EDU_JSP.TB_EEP_PLTFRM_USR_M
+	WHERE USR_ID =	#{usrId}
+</select>
+<update id="updateAuthorityMemberOne" parameterType="hashmap">
+	UPDATE EDU_JSP.TB_EEP_COMM_AUTH_EMPLY_R
+	SET USR_ID	=	#{usrId},
+		AUTH_CD =	#{authCd},
+		CMPNY_SQ=   #{cmpnySq},
+		EMPLY_SQ=   #{emplySq},
+		USR_SQ  =   #{newUsrSq}
+	WHERE USR_SQ = #{usrSq}
+		   
+</update>
+<delete id="deleteAuthorityMemberOne" parameterType="hashmap">
+		DELETE FROM EDU_JSP.TB_EEP_COMM_AUTH_EMPLY_R
+		WHERE  USR_ID 			=    #{usrId}
+</delete>
+</mapper>

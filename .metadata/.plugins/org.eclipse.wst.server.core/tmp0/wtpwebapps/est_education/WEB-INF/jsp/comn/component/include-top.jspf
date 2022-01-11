@@ -1,0 +1,183 @@
+<%@ page pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<script>
+    $(document).ready(function(){
+    	var requestUrl = "http://ip-api.com/json";
+    	$.ajax({
+    	  url: requestUrl,
+    	  type: 'GET',
+    	  success: function(json)
+    	  {
+    		  var country= json.country; //국가명
+    		  if(!gfn_isNull(country)){
+	    		  $("#country").html(country);
+    		  }
+    	  },
+    	  error: function(err)
+    	  {
+    	    console.log("Request failed, error= " + err);
+    	  }
+    	});
+    	
+    	currentTimeSetting();
+		currentTimeHandler();
+		fn_curPageDashbdMark();
+		
+		$("#btn_dashb").click(function() {
+			fn_dashbCntrl();
+		});
+       
+       // 마우스 우클릭 금지
+//      $("#wrap").on("contextmenu",function(e){
+//         /* 운영 배포 시 주석 해제 */
+//         return false;
+//       }); 
+       
+         $(".searchUri").each(function() {
+         if($(this).data("uri") == curPage){
+            $(this).parents(".part_dash").find(".part_head_dash").click();
+            $(this).addClass("on");
+         }
+      });
+         
+    });
+   
+  	//현재 페이지 대시보드 마크
+    function fn_curPageDashbdMark() {
+       var viewFileName = $("#viewFileName").val();
+       viewFileName = viewFileName.slice(viewFileName.lastIndexOf("/")+1,viewFileName.length);
+       $(".pageNm").each(function() {
+          if($(this).data("nm") == viewFileName){
+             $(this).addClass("on");
+             $(this).parents(".part_nav").find(".part_head_nav").addClass("on");
+             $(this).parents(".part_accordion_nav").show();
+          }
+       });
+    }
+  	
+	//현재 시간 설정
+	function currentTimeSetting() {
+		var currentTime = new Date().toLocaleString();
+		/* var type=navigator.appName;
+		var lang;
+		if(type=="Netscape"){
+			lang = navigator.language;
+		}else{
+			lang = navigator.userLanguage;
+		} */
+		//var subLang = lang.substr(0,2);
+		$("#currentTime").html(currentTime + " &nbsp; ");
+	}
+   
+	//현재 시간 핸들러
+	function currentTimeHandler() {
+    	var handler = setInterval(function(){
+    		currentTimeSetting();
+            // stop the loop
+            //clearInterval(handler);
+		}, 1000);
+	}
+    
+    /* 공통 메뉴 이동 - 시작 */
+   function fn_openLogOut(){ // 로그아웃 후 로그인 화면이동
+       var comSubmit = new ComSubmit();
+       comSubmit.setUrl("/v1/sys/logout.do");
+       comSubmit.submit();
+   }
+   function fn_openMain() { // 메인 이동
+       var comSubmit = new ComSubmit();
+       comSubmit.setUrl("/sysadm.do");
+       //comSubmit.addParam("viewNm", "/usr/comn/main/pages/scr_main.jsp");
+       comSubmit.submit();
+   }
+   /* 공통 메뉴 이동 - 끝 */
+</script>
+	<h1 class="logo"><button type="button" class="btn-bg-img" onclick="fn_openMain();">에듀해시</button></h1>
+	<div class="time">
+        <span id="currentTime"></span><span id="country"></span>
+        
+        <div class="util_box">
+	        <c:if test="${sessionScope.USER_INFO_OBJECT.usrSq ne null}">
+	            <span class="admin_usr">${sessionScope.USER_INFO_OBJECT.usrNm}&nbsp;님</span>
+	            <button class="btn_logout" onclick="fn_openLogOut();">로그아웃</button>
+			</c:if>
+        </div>
+    </div>
+   <!-- <aside class="dash_nav scrollBar" style="left:-500px;">
+        <div class="nav_list part_nav">
+            <a href="javascript:void(0);" class="part_head_nav"><img src="../images/icon_students_gray.svg" alt="학생">학생</a>
+            <div class="part_list part_accordion_nav">
+                <ul>
+                    <li><a href="javascript:void(0);" class="pageNm part_head_nav2" data-nm="scr_LearningDiagnss_ResultList" onclick="fn_openLearningDiagnssResultList();">3D학습진단</a></li>
+                    <li><a href="javascript:void(0);" class="pageNm part_head_nav2" data-nm="scr_curatngReqList" onclick="fn_openCuratngReqList();">큐레이팅 요청</a></li>
+                    <li class="part_nav2"><a href="javascript:void(0);" class="part_head_nav2">학습</a>
+                        <ul class="part_accordion_nav2">
+                            <li><a href="javascript:void(0);" class="pageNm" data-nm="scr_currclmList" onclick="fn_openCurrclmList();">구매커리큘럼</a></li>
+                            <li><a href="javascript:void(0);" class="pageNm" data-nm="scr_cntntGrpList" onclick="fn_openCntntGrpList();">구매 그룹 컨텐츠</a></li>
+                            <li><a href="javascript:void(0);" class="pageNm" data-nm="scr_cntntList" onclick="fn_openCntntList();">구매 컨텐츠</a></li>
+                        </ul>
+                    </li>
+                    <li class="part_nav2"><a href="javascript:void(0);" class="part_head_nav2">시험</a>
+                        <ul class="part_accordion_nav2">
+                            <li><a href="javascript:void(0);" class="pageNm" data-nm="scr_mckExamList" onclick="fn_openMckExamList();">모의고사</a></li>
+                            <li><a href="javascript:void(0);" class="pageNm" data-nm="scr_mckTestList" onclick="fn_openMckTestList();">모의테스트</a></li>
+                            <li><a href="javascript:void(0);" class="pageNm" onclick="fn_openWrongAnswNoteList();">오답노트</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="nav_list part_nav">
+            <a href="javascript:void(0);" class="part_head_nav"><img src="../images/icon_creator_gray.svg" alt="크리에이터">크리에이터</a>
+            <div class="part_list part_accordion_nav">
+                <ul>
+                    <li><a href="javascript:void(0);" class="pageNm part_head_nav2" data-nm="scr_cntntMngList" onclick="fn_openCreCntntMngList();">컨텐츠 관리</a></li>
+                    <li><a href="javascript:void(0);" class="pageNm part_head_nav2" data-nm="scr_cntntGrpMngList" onclick="fn_openCreGrpCntntMngList();">그룹 컨텐츠 관리</a></li>
+                    <li><a href="javascript:void(0);" class="pageNm part_head_nav2" data-nm="scr_questnMngList" onclick="fn_openCreQuestnMngList();">문제 관리</a></li>
+                    <li><a href="javascript:void(0);" class="pageNm part_head_nav2" data-nm="scr_examMngList" onclick="fn_openCreExamMngList();">시험 관리</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="nav_list part_nav">
+            <a href="javascript:void(0);" class="part_tit03 part_head_dash part_head_nav"><img src="../images/icon_curator_gray.svg" alt="큐레이터">큐레이터</a>
+            <div class="part_list part_accordion_nav">
+                <ul>
+                    <li><a href="javascript:void(0);" class="pageNm part_head_nav2" data-nm="scr_currclmMngList" onclick="fn_openCurrclmMngList();">커리큘럼 관리</a></li>
+                    <li><a href="javascript:void(0);" class="pageNm part_head_nav2" data-nm="scr_curatngSuggstList" onclick="fn_openCuratngSuggstMngList();">큐레이팅 제안</a></li>
+                    <li><a href="javascript:void(0);" class="pageNm part_head_nav2" data-nm="scr_mckExamMngList" onclick="fn_openMckExamMngList();">모의고사 관리</a></li>
+                    <li><a href="javascript:void(0);" class="pageNm part_head_nav2" data-nm="scr_" onclick="fn_openStudentMngList();">학생 관리</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="nav_list part_nav">
+           <a href="javascript:void(0);" class="part_tit03 part_head_dash part_head_nav"><img src="../images/icon_community_gray.svg" alt="커뮤니티">커뮤니티<i class="New" id="check_all2">New</i></a>
+        	<div class="part_list part_accordion_nav">
+              <ul>
+                 <li><a href="javascript:void(0);" class="pageNm part_head_nav2" data-nm="scr_ComuntyBrdList" onclick="fn_openComuntyBrdListList();">커뮤니티 목록</a></li>
+              </ul>
+           </div>
+        </div>
+
+        <div class="nav_list part_nav">
+            <a href="javascript:void(0);" class="part_tit03 part_head_dash part_head_nav"><img src="../images/icon_qna_gray.svg" alt=" & A">Q & A</a>
+            <div class="part_list part_accordion_nav">
+              <ul>
+                 <li><a href="javascript:void(0);" class="pageNm part_head_nav2" data-nm="scr_QnaBrdList" onclick="fn_openQnaMngList();">질문 목록</a></li>
+              </ul>
+           </div>
+        </div>
+
+        <div class="nav_list part_nav">
+            <a href="javascript:void(0);" class="part_tit03 part_head_dash part_head_nav"><img src="../images/icon_game_gray.svg" alt="게임">게임</a>
+           <div class="part_list part_accordion_nav">
+              <ul>
+                 <li><a href="javascript:void(0);" class="pageNm part_head_nav2" data-nm="usr_game" onclick="fn_openGameplayMngList();">게임하기</a></li>
+              </ul>
+           </div>
+        </div>
+
+        
+    </aside> -->

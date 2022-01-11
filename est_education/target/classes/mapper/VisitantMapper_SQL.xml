@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="visitant">
+	<!-- 멤버 - 목록 조회 -->
+	<select id="selectVisitantList" parameterType="hashmap" resultType="com.visitant.vo.VisitantVo">
+		<![CDATA[
+			SELECT 
+				  VISI_SQ
+				, VISI_NM
+				, VISI_DT
+				, VISI_ST
+				, VISI_EN
+				, VISI_NUM
+				, VISI_TEM
+				, VISI_TCD
+			FROM EDU_JSP.TB_EST_VISITANT
+		]]>
+		<where>
+			<if test="VISI_SQ_ARR != NULL">
+		    	AND VISI_SQ IN
+		    	<foreach collection="VISI_SQ_ARR" item="visiSq" open="(" close=")" separator=",">
+					#{visiSq}
+				</foreach>
+		    </if>
+			<if test="VISI_NM != NULL">
+		    	AND VISI_NM LIKE CONCAT('%', #{VISI_NM}, '%')
+		    </if>
+			<if test="VISI_NUM != NULL">
+		    	AND VISI_NUM LIKE CONCAT('%', #{VISI_NUM}, '%')
+		    </if>
+		    <if test="VISI_TCD != NULL">
+		    	AND VISI_TCD LIKE CONCAT('%', #{VISI_TCD}, '%')
+		    </if>
+		</where>
+	</select>
+	
+	<insert id="insertVisitant" parameterType="com.visitant.vo.VisitantVo">
+		<![CDATA[
+			INSERT INTO EDU_JSP.TB_EST_VISITANT (
+				  VISI_NM
+				, VISI_DT
+				, VISI_ST
+				, VISI_EN
+				, VISI_NUM
+				, VISI_TEM
+				, VISI_TCD
+			) VALUES (
+				  #{visiNm}
+				, #{visiDt}
+				, #{visiSt}
+				, #{visiEn}
+				, #{visiNum}
+				, #{visiTem}
+				, #{visiTcd}
+			)
+		]]>
+	</insert>
+	
+	<select id="selectVisitantOne" parameterType="_long" resultType="com.visitant.vo.VisitantVo">
+		<![CDATA[
+			SELECT * FROM EDU_JSP.TB_EST_VISITANT WHERE VISI_SQ = #{sq}
+		]]>
+	</select>
+	
+	<delete id="deleteVisitant" parameterType="_long">
+		<![CDATA[
+			DELETE FROM EDU_JSP.TB_EST_VISITANT
+			WHERE VISI_SQ = #{sq}
+		]]>
+	</delete>
+	
+	<update id="updateVisitant" parameterType="hashmap">
+		<![CDATA[
+			UPDATE EDU_JSP.TB_EST_VISITANT SET
+			   	  VISI_NM		=		#{VISI_NM}
+				, VISI_DT		=		#{VISI_DT}
+				, VISI_ST		=		#{VISI_ST}
+				, VISI_EN		=		#{VISI_EN}
+				, VISI_NUM		=		#{VISI_NUM}
+				, VISI_TEM		=		#{VISI_TEM}
+				, VISI_TCD		=		#{VISI_TCD}
+			WHERE VISI_SQ = #{VISI_SQ}
+		]]>
+	</update>
+
+</mapper>

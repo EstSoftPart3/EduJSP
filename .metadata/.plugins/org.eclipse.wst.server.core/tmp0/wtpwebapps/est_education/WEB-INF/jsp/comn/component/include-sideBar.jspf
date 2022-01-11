@@ -1,0 +1,316 @@
+<%@ page pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+	<!-- Main Sidebar Container -->
+	<aside class="main-sidebar sidebar-dark-primary elevation-4">
+	    <!-- Brand Logo -->
+	    <a href="/" class="brand-link">
+	        <img src="/dist/img/estmark.jpg" alt="AdminLTE Logo" class="brand-image" style="opacity: .8" />
+	        <span class="brand-text font-weight-light">EST ERP PROJECK</span>
+	    </a>
+	    <!-- /.Brand Logo -->
+
+	    <!-- Sidebar -->
+	    <div class="sidebar">
+	        <!-- Sidebar user panel (optional) -->
+	        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+	            <div class="image">
+	                <img src="/dist/img/user1-128x128.jpg" class="img-circle elevation-2" alt="User Image">
+	            </div>
+	            <div class="info">
+	                <a href="#" class="d-block" style="font-size: 14px;">
+	                    <b><c:out value="${ sessionScope.USER_SESSION_ID }" /></b> 님 안녕하세요.
+	                </a>
+
+	                <a href="/login/logout.do">
+	                    <small class="badge badge-danger">로그아웃</small>
+	                    <b id="sessionTime" style="color: white;"></b>
+	                </a>
+
+	            </div>
+	        </div>
+	        <!-- /.Sidebar user panel (optional) -->
+
+	        <!-- Sidebar Menu -->
+	        <nav class="mt-2">
+
+	            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+	                <li class="nav-item has-treeview">
+	                    <a href="#" class="nav-link">
+	                        <i class="fa fa-cog fa-spin fa-fw" style="font-size: 15px;"></i><span id="beforeSystemCount" class="badge badge-info right"></span>
+	                        <b>(구) 시스템</b>
+	                        <i class="fas fa-angle-left right"></i>
+	                    </a>
+	                    <ul class="nav nav-treeview" id="beforeSystem">
+	                        <li class="nav-item">
+	                            <a href="/code/openCodeListPage.do" class="nav-link">
+	                                <i class="far fa-circle nav-icon"></i>
+	                                <p>코드 관리</p>
+	                            </a>
+	                        </li>
+	                        <li class="nav-item">
+	                            <a href="/authority/openAuthorityListPage.do" class="nav-link">
+	                                <i class="far fa-circle nav-icon"></i>
+	                                <p>권한 관리</p>
+	                            </a>
+	                        </li>
+	                        <li class="nav-item">
+	                            <a href="/program/openProgramListPage.do" class="nav-link">
+	                                <i class="far fa-circle nav-icon"></i>
+	                                <p>프로그램 관리</p>
+	                            </a>
+	                        </li>
+	                    </ul>
+	                </li>
+	            </ul>
+				
+	            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+	                <li class="nav-item has-treeview">
+	                    <a href="#" class="nav-link">
+	                        <i class="fa fa-cog fa-spin fa-fw" style="font-size: 15px;"></i><span id="beforeWorkCount" class="badge badge-info right"></span>
+	                        <b>(구) 업무</b>
+	                        <i class="fas fa-angle-left right"></i>
+	                    </a>
+	                    <ul class="nav nav-treeview" id="beforeWork">
+	                        <li class="nav-item">
+	                            <a href="/member/openMemberListPage.do" class="nav-link">
+	                                <i class="far fa-circle nav-icon"></i>
+	                                <p>직원 관리</p>
+	                            </a>
+	                        </li>
+
+	                        <li class="nav-item">
+	                            <a href="/visitant/openVisitantListPage.do" class="nav-link">
+	                                <i class="far fa-circle nav-icon"></i>
+	                                <p>방문자 관리</p>
+	                            </a>
+	                        </li>
+
+	                        <li class="nav-item">
+	                            <a href="/project/openProjectListPage.do" class="nav-link">
+	                                <i class="far fa-circle nav-icon"></i>
+	                                <p>프로젝트 관리</p>
+	                            </a>
+	                        </li>
+
+	                        <li class="nav-item">
+	                            <a href="/skill/openSkillListPage.do" class="nav-link">
+	                                <i class="far fa-circle nav-icon"></i>
+	                                <p>기술 관리</p>
+	                            </a>
+	                        </li>
+
+	                        <li class="nav-item">
+	                            <a href="/equipment/openEquipmentListPage.do" class="nav-link">
+	                                <i class="far fa-circle nav-icon"></i>
+	                                <p>장비 관리</p>
+	                            </a>
+	                        </li>
+
+	                        <li class="nav-item">
+	                            <a href="/equipmentlental/openEquipmentLentalListPage.do" class="nav-link">
+	                                <i class="far fa-circle nav-icon"></i>
+	                                <p>장비대여 관리</p>
+	                            </a>
+	                        </li>
+
+	                        <li class="nav-item">
+	                            <a href="/quick/openQuickListPage.do" class="nav-link">
+	                                <i class="far fa-circle nav-icon"></i>
+	                                <p>배송 관리</p>
+	                            </a>
+	                        </li>
+
+	                        <li class="nav-item">
+	                            <a href="/partner/openPartnerListPage.do" class="nav-link">
+	                                <i class="far fa-circle nav-icon"></i>
+	                                <p>협력사 관리</p>
+	                            </a>
+	                        </li>
+
+	                        <li class="nav-item">
+	                            <a href="/humanresources/openHumanresourcesPage.do" class="nav-link">
+	                                <i class="far fa-circle nav-icon"></i>
+	                                <p>통계 관리</p>
+	                            </a>
+	                        </li>
+	                    </ul>
+	                </li>
+	            </ul>
+
+	            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+	                <li class="nav-item has-treeview">
+	                    <a href="#" class="nav-link">
+	                        <i class="fa fa-cog fa-spin fa-fw" style="font-size: 15px;"></i><span id="beforeDevelopmentCount" class="badge badge-info right"></span>
+	                        <b>(구) 연구개발</b>
+	                        <i class="fas fa-angle-left right"></i>
+	                    </a>
+	                    <ul class="nav nav-treeview" id="beforeDevelopment">
+	                        <li class="nav-item">
+	                            <a href="/erp/sample/sampleBoardPagingList.do" class="nav-link">
+	                                <i class="far fa-circle nav-icon"></i>
+	                                <p>연구개발 게시판</p>
+	                            </a>
+	                        </li>
+	                    </ul>
+	                </li>
+	            </ul>
+	            
+				<hr style="background-color: gray;">
+				
+				<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+	                <li class="nav-item has-treeview">
+	                    <a href="#" class="nav-link">
+	                        <i class="fa fa-cog fa-spin fa-fw" style="font-size: 15px;"></i><span id="laterSystemCount" class="badge badge-info right"></span>
+	                        <b>시스템</b>
+	                        <i class="fas fa-angle-left right"></i>
+	                    </a>
+	                    <ul class="nav nav-treeview" id="laterSystem">	
+	                    	<li class="nav-item">
+	                            <a href="/erp/system/code/openGroupCodeListPage.do" class="nav-link">
+	                                <i class="far fa-circle nav-icon"></i>
+	                                <p>코드 관리</p>
+	                            </a>
+	                        </li>
+	                        <li class="nav-item">
+	                            <a href="/erp/authority/openAuthorityListPage.do" class="nav-link">
+	                                <i class="far fa-circle nav-icon"></i>
+	                                <p>권한 관리</p>
+	                            </a>
+	                        </li>
+	                    </ul>
+	                </li>
+	            </ul>
+							
+	            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+	                <li class="nav-item has-treeview">
+	                    <a href="#" class="nav-link">
+	                        <i class="fa fa-cog fa-spin fa-fw" style="font-size: 15px;"></i><span id="laterManagementCount" class="badge badge-info right"></span>
+	                        <b>경영</b>
+	                        <i class="fas fa-angle-left right"></i>
+	                    </a>
+	                    <ul class="nav nav-treeview" id="laterManagement">
+	                    	<li class="nav-item">
+	                            <a href="/erp/shipping/openShippingListPage.do" class="nav-link">
+	                                <i class="far fa-circle nav-icon"></i>
+	                                <p>배송 관리</p>
+	                            </a>
+	                        </li>
+	                        <li class="nav-item">
+	                            <a href="/erp/equipment/openEquipmentListPage.do" class="nav-link">
+	                                <i class="far fa-circle nav-icon"></i>
+	                                <p>장비 관리</p>
+	                            </a>
+	                        </li>
+	                    </ul>
+	                </li>
+	            </ul>
+
+	            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+	                <li class="nav-item has-treeview">
+	                    <a href="#" class="nav-link">
+	                        <i class="fa fa-cog fa-spin fa-fw" style="font-size: 15px;"></i><span id="laterBusinessCount" class="badge badge-info right"></span>
+	                        <b>사업</b>
+	                        <i class="fas fa-angle-left right"></i>
+	                    </a>
+	                    <ul class="nav nav-treeview" id="laterBusiness">
+	                        <li class="nav-item">
+	                            <a href="/erp/business/project/openProjectListPage.do" class="nav-link">
+	                                <i class="far fa-circle nav-icon"></i>
+	                                <p>프로젝트 관리</p>
+	                            </a>
+	                        </li>
+	                        <li class="nav-item">
+	                            <a href="/erp/partner/selectPartnerPagingList.do" class="nav-link">
+	                                <i class="far fa-circle nav-icon"></i>
+	                                <p>협력사 관리</p>
+	                            </a>
+	                        </li>
+	                    </ul>
+	                </li>
+	                
+	            </ul>
+	            
+	            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+	                <li class="nav-item has-treeview">
+	                    <a href="#" class="nav-link">
+	                        <i class="fa fa-cog fa-spin fa-fw" style="font-size: 15px;"></i><span id="laterEducationCount" class="badge badge-info right"></span>
+	                        <b>교육</b>
+	                        <i class="fas fa-angle-left right"></i>
+	                    </a>
+	                    <ul class="nav nav-treeview" id="laterEducation">	
+	                    </ul>
+	                </li>
+	            </ul>
+	            
+	            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+	                <li class="nav-item has-treeview">
+	                    <a href="#" class="nav-link">
+	                        <i class="fa fa-cog fa-spin fa-fw" style="font-size: 15px;"></i><span id="laterHrManagementCount" class="badge badge-info right"></span>
+	                        <b>인사</b>
+	                        <i class="fas fa-angle-left right"></i>
+	                    </a>
+				        <ul class="nav nav-treeview" id="laterHrManagement">
+	                        <li class="nav-item">
+	                            <a href="/erp/member/selectMemberListPage.do" class="nav-link">
+	                                <i class="far fa-circle nav-icon"></i>
+	                                <p>직원 관리</p>
+	                            </a>
+	                        </li>
+	                    </ul>            
+	                </li>
+	            </ul>
+	            
+	            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+	                <li class="nav-item has-treeview">
+	                    <a href="#" class="nav-link">
+	                        <i class="fa fa-cog fa-spin fa-fw" style="font-size: 15px;"></i><span id="laterSalesCount" class="badge badge-info right"></span>
+	                        <b>영업</b>
+	                        <i class="fas fa-angle-left right"></i>
+	                    </a>
+	                    <ul class="nav nav-treeview" id="laterSales">	
+	                    </ul>
+	                </li>
+	            </ul>
+	            
+	            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+	                <li class="nav-item has-treeview">
+	                    <a href="#" class="nav-link">
+	                        <i class="fa fa-cog fa-spin fa-fw" style="font-size: 15px;"></i><span id="laterDevelopmentCount" class="badge badge-info right"></span>
+	                        <b>연구개발</b>
+	                        <i class="fas fa-angle-left right"></i>
+	                    </a>
+	                    <ul class="nav nav-treeview" id="laterDevelopment">	
+	                    </ul>
+	                </li>
+	            </ul>
+	            
+	            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+	                <li class="nav-item has-treeview">
+	                    <a href="#" class="nav-link">
+	                        <i class="fa fa-cog fa-spin fa-fw" style="font-size: 15px;"></i><span id="laterStatisticsCount" class="badge badge-info right"></span>
+	                        <b>통계</b>
+	                        <i class="fas fa-angle-left right"></i>
+	                    </a>
+	                    <ul class="nav nav-treeview" id="laterStatistics">	
+	                    </ul>
+	                </li>
+	            </ul>
+
+	        </nav>
+	        <!-- /.Sidebar Menu -->
+	    </div>
+	    <!-- /.Sidebar -->
+	</aside>
+	<!-- /.Main Sidebar Container -->

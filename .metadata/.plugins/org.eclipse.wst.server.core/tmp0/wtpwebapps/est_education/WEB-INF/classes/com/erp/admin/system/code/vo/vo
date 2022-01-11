@@ -1,0 +1,32 @@
+==================================Vo
+
+GroupCodeVo
+
+String grpCd;		//그룹 코드
+int compnySq;		//회사 순번
+String grpCdNm;		//그룹 코드 명
+String grpCdOrder;		//그룹 코드 순서
+String grpCdUseWhthr;	//그룹 코드 사용 여부
+Date grpCdEnrlmDt;	//그룹 코드 등록 일자
+Date grpCdCrrctnDt;	//그룹 코드 수정 일자
+int grpCdCrrctnUsrSq;	//그룹 코드 수정 사용자 순번
+String grpCdNote;		//그룹 코드 비고
+
+
+DetailCodeVo
+
+String dtlCd;		//상세 코드
+String grpCd;		//그룹 코드
+int compnySq;		//회사 순번
+String dtlCdNm;		//상세 코드 명
+int dtlCdOrder;		//상세 코드 순서
+String dtlCdUseWhthr;	//상세 코드 사용 여부
+Date dtlCdEnrlmDt;		//상세 코드 등록 일자
+Date dtlCdCrrctnDt;	//상세 코드 수정 일자
+int dtlCdCrrctnUsrSq;	//상세 코드 수정 사용자 순번
+String dtlCdPrprtVal1;	//상세 코드 속성값1
+String dtlCdPrprtVal2;	//상세 코드 속성값2
+String dtlCdPrprtVal3;	//상세 코드 속성값3
+String dtlCdNote;		//상세 코드 비고
+
+getter, setter, toString

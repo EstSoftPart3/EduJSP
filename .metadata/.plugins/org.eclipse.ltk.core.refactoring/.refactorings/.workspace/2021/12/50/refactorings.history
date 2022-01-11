@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Delete 7 resources" deleteContents="false" description="Delete 7 resources" element1="/est_education/src/main/java/com/erp/admin/notice/controller" element2="/est_education/src/main/java/com/erp/admin/notice/dao" element3="/est_education/src/main/java/com/erp/admin/notice/FileUtils" element4="/est_education/src/main/java/com/erp/admin/notice/service" element5="/est_education/src/main/java/com/erp/admin/notice/vo" element6="/est_education/src/main/resources/mapper/ErpNoticeMapper_SQL.xml" element7="/est_education/src/main/webapp/WEB-INF/jsp/erp/notice" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="7" stamp="1638760171019"/>
+</session>

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="member">
+	<!-- 멤버 - 목록 조회 -->
+	<select id="selectMemberList" parameterType="hashmap" resultType="com.member.vo.MemberVo">
+		<![CDATA[
+			SELECT 
+				  M.MBR_SQ
+				, M.MBR_ID
+				, M.MBR_DPRTMT_CD
+				, (SELECT C.CODE_NM FROM TB_EST_CODE C WHERE M.MBR_DPRTMT_CD = C.CODE_COM_CD AND C.CODE_GRP_CD="CODE00008") AS MBR_DPRTMT_NM
+				, M.MBR_POSITN_CD
+				, (SELECT C.CODE_NM FROM TB_EST_CODE C WHERE M.MBR_POSITN_CD = C.CODE_COM_CD AND C.CODE_GRP_CD="CODE00006") AS MBR_POSITN_NM
+				, M.MBR_NM
+				, M.MBR_HP_NUM
+				, M.MBR_EMAIL
+				, M.MBR_ADDR
+				, M.MBR_STRT_DT
+				, M.MBR_LEAVE_DT
+			FROM EDU_JSP.TB_EST_MBR M
+		]]>
+		<where>
+			<if test="MBR_SQ_ARR != NULL">
+		    	AND MBR_SQ IN
+		    	<foreach collection="MBR_SQ_ARR" item="mbrSq" open="(" close=")" separator=",">
+					#{mbrSq}
+				</foreach>
+		    </if>
+			<if test="MBR_NM != NULL">
+		    	AND MBR_NM LIKE CONCAT('%', #{MBR_NM}, '%')
+		    </if>
+			<if test="MBR_EMAIL != NULL">
+		    	AND MBR_EMAIL LIKE CONCAT('%', #{MBR_EMAIL}, '%')
+		    </if>
+			<if test="MBR_HP_NUM != NULL">
+		    	AND MBR_HP_NUM LIKE CONCAT('%', #{MBR_HP_NUM}, '%')
+		    </if>
+		    <if test="MBR_POSITN_CD != NULL">
+		    	AND MBR_POSITN_CD LIKE CONCAT('%', #{MBR_POSITN_CD}, '%')
+		    </if>
+		    <if test="MBR_DPRTMT_CD != NULL">
+		    	AND MBR_DPRTMT_CD LIKE CONCAT('%', #{MBR_DPRTMT_CD}, '%')
+		    </if>
+		    <if test="IS_MBR_LEAVE_DT == 'employee'">
+		    	AND (MBR_LEAVE_DT IS NULL OR MBR_LEAVE_DT = '')
+		    </if>
+		    <if test="IS_MBR_LEAVE_DT == 'notEmployee'">
+		    	AND MBR_LEAVE_DT != ''
+		    </if>
+		</where>
+	</select>
+	
+	<insert id="insertMember" parameterType="com.member.vo.MemberVo">
+		<![CDATA[
+			INSERT INTO EDU_JSP.TB_EST_MBR (
+				  MBR_ID
+				, MBR_PWD
+				, MBR_TYP_CD
+				, MBR_DPRTMT_CD
+				, MBR_POSITN_CD
+				, MBR_NM
+				, MBR_REG_NUM
+				, MBR_HP_NUM
+				, MBR_EMAIL
+				, MBR_ADDR
+				, MBR_BANK_CD
+				, MBR_ACC_NUM
+				, MBR_STRT_DT
+				, MBR_JOIN_DT
+				, MBR_LEAVE_DT
+				, MBR_RLTNSHP_CD1
+				, MBR_RLTNSHP_HP_NUM1
+				, MBR_RLTNSHP_CD2
+				, MBR_RLTNSHP_HP_NUM2
+				, MBR_ETC_INFO
+				, MBR_DCMNT1_YN
+				, MBR_DCMNT2_YN
+				, MBR_DCMNT3_YN
+				, MBR_DCMNT4_YN
+				, MBR_DCMNT5_YN
+			) VALUES (
+				  #{mbrId}
+				, #{mbrPwd}
+				, #{mbrTypCd}
+				, #{mbrDprtmtCd}
+				, #{mbrPositnCd}
+				, #{mbrNm}
+				, #{mbrRegNum}
+				, #{mbrHpNum}
+				, #{mbrEmail}
+				, #{mbrAddr}
+				, #{mbrBankCd}
+				, #{mbrAccNum}
+				, #{mbrStrtDt}
+				, #{mbrJoinDt}
+				, #{mbrLeaveDt}
+				, #{mbrRltnshpCd1}
+				, #{mbrRltnshpHpNum1}
+				, #{mbrRltnshpCd2}
+				, #{mbrRltnshpHpNum2}
+				, #{mbrEtcInfo}
+				, #{mbrDcmnt1Yn}
+				, #{mbrDcmnt2Yn}
+				, #{mbrDcmnt3Yn}
+				, #{mbrDcmnt4Yn}
+				, #{mbrDcmnt5Yn}
+			)
+		]]>
+	</insert>
+	
+	<select id="selectMemberOne" parameterType="_long" resultType="com.member.vo.MemberVo">
+		<![CDATA[
+			
+			SELECT 
+	    		M.MBR_SQ 
+	    		, M.MBR_ID 
+	    		, M.MBR_PWD 
+			    , M.MBR_TYP_CD 
+			    , (SELECT C.CODE_NM FROM TB_EST_CODE C WHERE M.MBR_TYP_CD = C.CODE_COM_CD) AS MBR_TYP_NM 
+			    , M.MBR_DPRTMT_CD
+			    , (SELECT C.CODE_NM FROM TB_EST_CODE C WHERE M.MBR_DPRTMT_CD = C.CODE_COM_CD) AS MBR_DPRTMT_NM 
+			    , M.MBR_POSITN_CD
+			    , (SELECT C.CODE_NM FROM TB_EST_CODE C WHERE M.MBR_POSITN_CD = C.CODE_COM_CD) AS MBR_POSITN_NM ,
+			    M.MBR_NM 
+			    , M.MBR_REG_NUM 
+			    , M.MBR_HP_NUM 
+			    , M.MBR_EMAIL 
+			    , M.MBR_ADDR 
+			    , M.MBR_BANK_CD 
+			    , M.MBR_ACC_NUM 
+			    , M.MBR_STRT_DT 
+			    , M.MBR_JOIN_DT 
+			    , M.MBR_LEAVE_DT
+			    , M.MBR_RLTNSHP_CD1
+			    , (SELECT C.CODE_NM FROM TB_EST_CODE C WHERE M.MBR_RLTNSHP_CD1 = C.CODE_COM_CD) AS MBR_RLTNSHP_NM1 
+			    , M.MBR_RLTNSHP_HP_NUM1 
+			    , M.MBR_RLTNSHP_CD2
+			    , (SELECT C.CODE_NM FROM TB_EST_CODE C WHERE M.MBR_RLTNSHP_CD2 = C.CODE_COM_CD) AS MBR_RLTNSHP_NM2 
+			    , M.MBR_RLTNSHP_HP_NUM2 
+			    , M.MBR_ETC_INFO 
+			    , MBR_DCMNT1_YN 
+			    , MBR_DCMNT2_YN 
+			    , MBR_DCMNT3_YN 
+			    , MBR_DCMNT4_YN 
+			    , MBR_DCMNT5_YN			
+		    FROM 
+		    	EDU_JSP.TB_EST_MBR M 
+		    WHERE 
+		    	M.MBR_SQ = #{sq};
+		]]>
+	</select>
+	
+	<update id="updateMember" parameterType="hashmap">
+		<![CDATA[
+			UPDATE EDU_JSP.TB_EST_MBR SET
+			  MBR_ID				= #{MBR_ID}
+			, MBR_PWD				= #{MBR_PWD}
+			, MBR_TYP_CD			= #{MBR_TYP_CD}
+			, MBR_DPRTMT_CD			= #{MBR_DPRTMT_CD}
+			, MBR_POSITN_CD			= #{MBR_POSITN_CD}
+			, MBR_NM				= #{MBR_NM}
+			, MBR_REG_NUM			= #{MBR_REG_NUM}
+			, MBR_HP_NUM			= #{MBR_HP_NUM}
+			, MBR_EMAIL				= #{MBR_EMAIL}
+			, MBR_ADDR				= #{MBR_ADDR}
+			, MBR_BANK_CD			= #{MBR_BANK_CD}
+			, MBR_ACC_NUM			= #{MBR_ACC_NUM}
+			, MBR_STRT_DT			= #{MBR_STRT_DT}
+			, MBR_JOIN_DT			= #{MBR_JOIN_DT}
+			, MBR_LEAVE_DT			= #{MBR_LEAVE_DT}
+			, MBR_RLTNSHP_CD1		= #{MBR_RLTNSHP_CD1}
+			, MBR_RLTNSHP_HP_NUM1	= #{MBR_RLTNSHP_HP_NUM1}
+			, MBR_RLTNSHP_CD2		= #{MBR_RLTNSHP_CD2}
+			, MBR_RLTNSHP_HP_NUM2	= #{MBR_RLTNSHP_HP_NUM2}
+			, MBR_ETC_INFO			= #{MBR_ETC_INFO}
+			, MBR_DCMNT1_YN			= #{MBR_DCMNT1_YN}
+			, MBR_DCMNT2_YN			= #{MBR_DCMNT2_YN}
+			, MBR_DCMNT3_YN			= #{MBR_DCMNT3_YN}
+			, MBR_DCMNT4_YN			= #{MBR_DCMNT4_YN}
+			, MBR_DCMNT5_YN			= #{MBR_DCMNT5_YN}
+			WHERE MBR_SQ = #{MBR_SQ}
+		]]>
+	</update>
+	
+	<update id="updateLeaveDt" parameterType="hashmap">
+		<![CDATA[
+			UPDATE EDU_JSP.TB_EST_MBR 
+			SET MBR_LEAVE_DT = #{MBR_LEAVE_DT}
+		]]>
+		<where>
+			MBR_SQ IN
+			<foreach collection="MBR_SQ_LIST" item="mbrSq" open="(" close=")" separator=",">
+					#{mbrSq}
+			</foreach>
+		</where>
+	</update>
+	
+	<delete id="deleteMember" parameterType="_long">
+		<![CDATA[
+			DELETE FROM EDU_JSP.TB_EST_MBR
+			WHERE MBR_SQ = #{sq}
+		]]>
+	</delete>
+	
+	<!-- <select id="selectcomCodeList" parameterType="hashmap"
+		resultType="com.code.vo.CodeVo">
+		<![CDATA[
+		SELECT 
+     	CODE_GRP_CD,CODE_COM_CD,CODE_NM            
+		FROM 
+      	TB_EST_CODE 
+		WHERE 
+      	CODE_GRP_CD = #{grpCd}		
+	    ]]>
+	</select> -->
+
+</mapper>
